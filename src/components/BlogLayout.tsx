@@ -36,7 +36,7 @@ const BlogLayout = ({ children }: BlogLayoutProps) => {
         <div className="max-w-prose mx-auto">
           <Link to="/" className="no-underline">
             <h1 className="site-title font-display text-2xl font-bold tracking-tight">
-              Blog
+              vmhq
             </h1>
           </Link>
         </div>
