@@ -55,6 +55,9 @@ const BlogLayout = ({ children }: BlogLayoutProps) => {
           <a href="/rss.xml" className="underline underline-offset-2 hover:text-foreground">
             RSS
           </a>
+          <a href="https://github.com/vmhq" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-foreground">
+            GitHub
+          </a>
           <button
             onClick={toggleTheme}
             className="underline underline-offset-2 hover:text-foreground text-muted-foreground bg-transparent border-none cursor-pointer text-sm font-body"
