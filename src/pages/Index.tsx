@@ -1,13 +1,32 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { Link } from "react-router-dom";
+import BlogLayout from "@/components/BlogLayout";
+import { getAllPosts } from "@/lib/posts";
+
+const formatDate = (dateStr: string) => {
+  const d = new Date(dateStr);
+  return d.toLocaleDateString("es-ES", { year: "numeric", month: "long", day: "numeric" });
+};
 
 const Index = () => {
+  const posts = getAllPosts();
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
+    <BlogLayout>
+      <div className="space-y-8">
+        {posts.map((post) => (
+          <article key={post.slug}>
+            <Link to={`/post/${post.slug}`} className="group block no-underline">
+              <h2 className="article-title font-display text-xl font-bold tracking-tight group-hover:text-muted-foreground transition-colors duration-150">
+                {post.title}
+              </h2>
+              <time className="text-sm text-muted-foreground mt-1 block">
+                {formatDate(post.date)}
+              </time>
+            </Link>
+          </article>
+        ))}
       </div>
-    </div>
+    </BlogLayout>
   );
 };
 
