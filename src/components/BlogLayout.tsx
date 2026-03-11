@@ -36,7 +36,7 @@ const BlogLayout = ({ children }: BlogLayoutProps) => {
         <div className="max-w-prose mx-auto">
           <Link to="/" className="no-underline">
             <h1 className="site-title font-display text-2xl font-bold tracking-tight">
-              Blog
+              vmhq
             </h1>
           </Link>
         </div>
@@ -48,7 +48,7 @@ const BlogLayout = ({ children }: BlogLayoutProps) => {
 
       <footer className="py-12 px-6 mt-16">
         <div className="max-w-prose mx-auto flex items-center gap-6 text-sm text-muted-foreground">
-          <span>© {new Date().getFullYear()}</span>
+          <span>© vmhq {new Date().getFullYear()}</span>
           <Link to="/about" className="underline underline-offset-2 hover:text-foreground">
             Acerca
           </Link>
