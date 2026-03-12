@@ -1,20 +1,10 @@
-import { useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import BlogLayout from "@/components/BlogLayout";
 import { getAllPosts } from "@/lib/posts";
+import { formatDate, readingTime } from "@/lib/formatters";
 
 const POSTS_PER_PAGE = 10;
-
-const formatDate = (dateStr: string) => {
-  const d = new Date(dateStr);
-  return d.toLocaleDateString("es-ES", { year: "numeric", month: "long", day: "numeric" });
-};
-
-const readingTime = (content: string) => {
-  const words = content.trim().split(/\s+/).length;
-  const minutes = Math.max(1, Math.round(words / 200));
-  return `${minutes} min de lectura`;
-};
 
 const Index = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -30,6 +20,10 @@ const Index = () => {
 
   return (
     <BlogLayout>
+      <Helmet>
+        <title>Reflexiones Minimalistas — vmhq</title>
+        <meta name="description" content="Blog personal minimalista. Reflexiones sobre diseño, tecnología y escritura." />
+      </Helmet>
       <div className="space-y-8">
         {paginated.map((post) => (
           <article key={post.slug}>
@@ -38,7 +32,7 @@ const Index = () => {
                 {post.title}
               </h2>
               <div className="flex items-center gap-3 text-sm text-muted-foreground mt-1">
-                <time>{formatDate(post.date)}</time>
+                <time dateTime={post.date}>{formatDate(post.date)}</time>
                 <span>·</span>
                 <span>{readingTime(post.content)}</span>
               </div>

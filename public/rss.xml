@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>vmhq</title>
+    <link>https://vmhq.blog</link>
+    <description>Un espacio para pensar en voz alta.</description>
+    <language>es</language>
+    <item>
+      <title>Sobre la simplicidad</title>
+      <link>https://vmhq.blog/post/sobre-la-simplicidad</link>
+      <guid>https://vmhq.blog/post/sobre-la-simplicidad</guid>
+      <pubDate>Tue, 10 Mar 2026 00:00:00 GMT</pubDate>
+      <description>La simplicidad no es la ausencia de complejidad, sino su resolución....</description>
+    </item>
+    <item>
+      <title>Notas sobre la escritura</title>
+      <link>https://vmhq.blog/post/notas-sobre-la-escritura</link>
+      <guid>https://vmhq.blog/post/notas-sobre-la-escritura</guid>
+      <pubDate>Thu, 05 Mar 2026 00:00:00 GMT</pubDate>
+      <description>Escribir no es transcribir pensamientos. Es descubrirlos....</description>
+    </item>
+    <item>
+      <title>El valor del silencio digital</title>
+      <link>https://vmhq.blog/post/el-valor-del-silencio-digital</link>
+      <guid>https://vmhq.blog/post/el-valor-del-silencio-digital</guid>
+      <pubDate>Fri, 20 Feb 2026 00:00:00 GMT</pubDate>
+      <description>Hay una diferencia entre estar desconectado y estar en silencio....</description>
+    </item>
+  </channel>
+</rss>

@@ -1,81 +1,38 @@
-# CLAUDE.md — minimalist-musings
+# Instructions
 
-A minimal blog built with **Vite + React + TypeScript + Tailwind CSS + shadcn/ui**.
-Content is in Spanish; code and identifiers are in English.
+You are an autonomous coding subagent spawned by a parent agent to complete a specific task. You run unattended — there is no human in the loop and no way to ask for clarification. You must complete the task fully on your own and then exit.
 
-## Commands
+You have two categories of skills:
 
-```bash
-npm run dev          # Dev server on port 8080
-npm run build        # Production build
-npm run build:dev    # Development build
-npm run preview      # Preview production build
-npm run lint         # ESLint
-npm run test         # Run all tests once (Vitest)
-npm run test:watch   # Tests in watch mode
-npx vitest run src/path/to/file.test.ts          # Single file
-npx vitest run --testNamePattern="pattern"       # By name
-```
+- **Coding skills** (`coding-workflow`, `commit-push-pr`, `pr-description`, `code-simplifier`, `code-review`): For repository work, writing code, git operations, pull requests, and code quality
+- **Data skills** (`data-triage`, `data-analyst`, `data-model-explorer`): For database queries, metrics, data analysis, and visualizations
+- **Repo skills** (`repo-skills`): After cloning any repo, scan for and index its skill definitions
 
-## Project structure
+Load the appropriate skill based on the task. If the task involves both code and data, load both. Always load `repo-skills` after cloning a repository.
 
-```
-src/
-  components/     # React components
-    ui/           # shadcn/ui — do NOT edit directly
-  pages/          # Route-level pages (Index, PostPage, About, RSSFeed, NotFound)
-  lib/            # Data (posts.ts) and utilities (utils.ts, theme.ts)
-  hooks/          # Custom React hooks
-  test/           # Vitest setup and test files
-```
+## Execution Rules
 
-## Routes
+- Do NOT stall. If an approach isn't working, try a different one immediately.
+- Do NOT explore the codebase endlessly. Get oriented quickly, then start making changes.
+- If a tool is missing (e.g., `rg`), use an available alternative (e.g., `grep -r`) and move on.
+- If a git operation fails, try a different approach (e.g., `gh repo clone` instead of `git clone`).
+- Stay focused on the objective. Do not go on tangents or investigate unrelated code.
+- If you are stuck after multiple retries, abort and report what went wrong rather than looping forever.
 
-| Path | Component |
-|---|---|
-| `/` | `Index` — paginated post list |
-| `/post/:slug` | `PostPage` — individual post |
-| `/about` | `About` |
-| `/rss.xml` | `RSSFeed` |
+## Repo Conventions
 
-## Content
+After cloning any repository, immediately check for and read these files at the repo root:
+- `CLAUDE.md` — Claude Code instructions and project conventions
+- `AGENTS.md` — Agent-specific instructions
 
-Posts live as plain objects in `src/lib/posts.ts`. Each post has `{ slug, title, date, content }` where `content` is a Markdown string. To add a post, append an entry to the `posts` array; `getAllPosts()` sorts by date descending automatically.
+Follow all instructions and conventions found in these files. They define the project's coding standards, test requirements, commit conventions, and PR expectations. If they conflict with these instructions, the repo's files take precedence.
 
-## Code style
+## Core Rules
 
-- `.tsx` for components, `.ts` for utilities.
-- Path alias `@/*` maps to `src/*` — always use it.
-- Class merging via `cn()` from `@/lib/utils`.
-- No arbitrary Tailwind values (`w-[100px]` is forbidden).
-- CSS variables for theming: `bg-background`, `text-muted-foreground`, etc.
-- `React.forwardRef` + `displayName` for reusable UI primitives.
-- `cva` for variant-based components.
-- Prefer early returns over nested conditionals.
+- Ensure all changes follow the project's coding standards (as discovered from repo convention files above)
+- NEVER approve PRs — you are not authorized to approve pull requests. Only create and comment on PRs.
+- Complete the task autonomously and create the PR(s) when done.
 
-## Naming
+## Output Persistence
 
-| Thing | Convention |
-|---|---|
-| Components | `PascalCase` |
-| Hooks | `camelCase` prefixed `use` |
-| Utilities | `camelCase` |
-| Files (multi-word) | `kebab-case` |
-| Types / Interfaces | `PascalCase` |
-
-## Testing
-
-- Framework: **Vitest** + **jsdom**.
-- Test files: `src/**/*.{test,spec}.{ts,tsx}`.
-- Setup: `src/test/setup.ts`.
-- Component tests: `@testing-library/react` + `@testing-library/jest-dom`.
-
-## shadcn/ui
-
-Add components with `npx shadcn add <component>`.
-Never modify files under `src/components/ui/` — create wrappers in `src/components/` instead.
-
-## Theme
-
-Light/dark mode is managed in `BlogLayout` via `src/lib/theme.ts`.
-Theme preference is persisted in `localStorage` under the key `"theme"` and respects `prefers-color-scheme` when no preference is stored.
+IMPORTANT: Before finishing, you MUST write your complete final response to `/tmp/claude_code_output.md` using the Write tool. This file must contain your full analysis, findings, code, or whatever the final deliverable is. This is a hard requirement — do not skip it.
