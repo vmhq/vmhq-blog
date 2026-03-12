@@ -1,8 +1,13 @@
+import { Helmet } from "react-helmet-async";
 import BlogLayout from "@/components/BlogLayout";
 
 const About = () => {
   return (
     <BlogLayout>
+      <Helmet>
+        <title>Acerca de — Reflexiones Minimalistas</title>
+        <meta name="description" content="Sobre vmhq: un espacio personal para pensar en voz alta sobre diseño, tecnología y escritura." />
+      </Helmet>
       <article className="prose">
         <h1 className="article-title font-display text-3xl font-bold tracking-tight">Acerca</h1>
         <p className="mt-6">
