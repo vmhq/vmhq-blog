@@ -35,6 +35,10 @@ The dev server starts at `http://localhost:8080`.
 ## Project Structure
 
 ```
+posts/
+└── YYYY/
+    └── mes/
+        └── nombre_del_post_DD_MM.md   # Posts en Markdown
 src/
 ├── components/     # Reusable components (BlogLayout)
 ├── lib/            # Utilities (posts, formatters, theme, utils)
@@ -47,10 +51,31 @@ scripts/
 └── generate-feeds.ts   # Build-time RSS and sitemap generation
 ```
 
+## Posts
+
+Los posts son archivos Markdown individuales organizados por año y mes:
+
+```
+posts/2026/marzo/sobre_la_simplicidad_10_03.md
+```
+
+Cada archivo usa frontmatter YAML:
+
+```markdown
+---
+title: Título del post
+slug: titulo-del-post
+date: 2026-03-10
+---
+Contenido en Markdown...
+```
+
+Para publicar un nuevo post, basta con crear el archivo `.md` en la carpeta correspondiente y hacer build. El sistema lo recoge automáticamente.
+
 ## Build-Time Generation
 
-The `prebuild` script runs before each build to generate:
-- `public/rss.xml` — RSS 2.0 feed
+El script `prebuild` corre antes de cada build y genera:
+- `public/rss.xml` — RSS 2.0 feed (a partir de los archivos `.md`)
 - `public/sitemap.xml` — XML sitemap
 
 ## License
