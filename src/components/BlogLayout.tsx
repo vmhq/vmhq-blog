@@ -77,10 +77,9 @@ const BlogLayout = ({ children }: BlogLayoutProps) => {
             onClick={cycleTheme}
             aria-label={`Cambiar tema. Actual: ${themeLabel}`}
             title={`Tema: ${themeLabel}`}
-            className="inline-flex items-center gap-2 rounded-full border border-border px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-colors"
+            className="inline-flex items-center justify-center rounded-full border border-border p-2 text-sm text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-colors"
           >
             {theme === "system" ? <SystemIcon /> : resolvedTheme === "dark" ? <MoonIcon /> : <SunIcon />}
-            <span className="hidden sm:inline">{themeLabel}</span>
           </button>
         </div>
       </header>
