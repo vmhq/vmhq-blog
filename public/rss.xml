@@ -6,6 +6,13 @@
     <description>Un espacio para pensar en voz alta.</description>
     <language>es</language>
     <item>
+      <title>Bun, el runtime que quiere reemplazarlo todo</title>
+      <link>https://vmhq.blog/post/bun-el-runtime-que-quiere-reemplazarlo-todo</link>
+      <guid>https://vmhq.blog/post/bun-el-runtime-que-quiere-reemplazarlo-todo</guid>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 GMT</pubDate>
+      <description>JavaScript tiene un problema viejo: demasiadas herramientas haciendo cosas distintas. Node.js para ejecutar, npm para instalar, Webpack o Vite para construir, Jest para testear. Cada una funciona, per...</description>
+    </item>
+    <item>
       <title>Post de prueba</title>
       <link>https://vmhq.blog/post/post-de-prueba</link>
       <guid>https://vmhq.blog/post/post-de-prueba</guid>

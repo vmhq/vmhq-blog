@@ -1,9 +1,10 @@
 # vmhq — Reflexiones Minimalistas
 
-A minimalist personal blog built with Vite, React, TypeScript, and Tailwind CSS.
+A minimalist personal blog built with Vite, React, TypeScript, Tailwind CSS, and **Bun**.
 
 ## Tech Stack
 
+- **Bun** — package manager and runtime
 - **Vite** — build tool and dev server
 - **React 18** — UI library with StrictMode enabled
 - **TypeScript** — strict mode
@@ -11,12 +12,13 @@ A minimalist personal blog built with Vite, React, TypeScript, and Tailwind CSS.
 - **react-helmet-async** — per-page SEO meta tags
 - **react-markdown** + remark-gfm — Markdown rendering
 - **Vitest** — unit testing
+- **Vercel Analytics** — privacy-friendly page analytics
 
 ## Getting Started
 
 ```sh
-npm install
-npm run dev
+bun install
+bun run dev
 ```
 
 The dev server starts at `http://localhost:8080`.
@@ -25,12 +27,12 @@ The dev server starts at `http://localhost:8080`.
 
 | Command | Description |
 |---|---|
-| `npm run dev` | Start development server |
-| `npm run build` | Generate RSS/sitemap, then production build |
-| `npm run preview` | Preview production build locally |
-| `npm run lint` | Run ESLint |
-| `npm test` | Run tests |
-| `npm run test:watch` | Run tests in watch mode |
+| `bun run dev` | Start development server |
+| `bun run build` | Generate RSS/sitemap, then production build |
+| `bun run preview` | Preview production build locally |
+| `bun run lint` | Run ESLint |
+| `bun run test` | Run tests |
+| `bun run test:watch` | Run tests in watch mode |
 
 ## Project Structure
 
@@ -71,6 +73,14 @@ Contenido en Markdown...
 ```
 
 Para publicar un nuevo post, basta con crear el archivo `.md` en la carpeta correspondiente y hacer build. El sistema lo recoge automáticamente.
+
+## Vercel
+
+El proyecto está configurado para desplegar con **Bun** en Vercel:
+
+- `installCommand`: `bun install`
+- `buildCommand`: `bun run build`
+- `outputDirectory`: `dist`
 
 ## Build-Time Generation
 
