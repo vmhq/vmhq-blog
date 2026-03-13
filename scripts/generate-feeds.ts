@@ -1,33 +1,6 @@
 import { writeFileSync, mkdirSync } from "fs";
 import { join } from "path";
-
-interface Post {
-  slug: string;
-  title: string;
-  date: string;
-  content: string;
-}
-
-const posts: Post[] = [
-  {
-    slug: "sobre-la-simplicidad",
-    title: "Sobre la simplicidad",
-    date: "2026-03-10",
-    content: "La simplicidad no es la ausencia de complejidad, sino su resolución.",
-  },
-  {
-    slug: "notas-sobre-la-escritura",
-    title: "Notas sobre la escritura",
-    date: "2026-03-05",
-    content: "Escribir no es transcribir pensamientos. Es descubrirlos.",
-  },
-  {
-    slug: "el-valor-del-silencio-digital",
-    title: "El valor del silencio digital",
-    date: "2026-02-20",
-    content: "Hay una diferencia entre estar desconectado y estar en silencio.",
-  },
-];
+import { getAllPosts } from "../src/lib/posts";
 
 const SITE_URL = "https://vmhq.blog";
 
@@ -40,9 +13,7 @@ function escapeXml(str: string): string {
 }
 
 function generateRSS(): string {
-  const sorted = [...posts].sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-  );
+  const sorted = getAllPosts();
 
   const items = sorted
     .map(
@@ -69,9 +40,7 @@ ${items}
 }
 
 function generateSitemap(): string {
-  const sorted = [...posts].sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-  );
+  const sorted = getAllPosts();
 
   const urls = [
     `  <url><loc>${SITE_URL}/</loc></url>`,
