@@ -1,5 +1,5 @@
-import { writeFileSync, mkdirSync } from "fs";
-import { join } from "path";
+import { writeFileSync, mkdirSync, readdirSync, readFileSync } from "fs";
+import { join, resolve } from "path";
 
 interface Post {
   slug: string;
@@ -8,26 +8,49 @@ interface Post {
   content: string;
 }
 
-const posts: Post[] = [
-  {
-    slug: "sobre-la-simplicidad",
-    title: "Sobre la simplicidad",
-    date: "2026-03-10",
-    content: "La simplicidad no es la ausencia de complejidad, sino su resolución.",
-  },
-  {
-    slug: "notas-sobre-la-escritura",
-    title: "Notas sobre la escritura",
-    date: "2026-03-05",
-    content: "Escribir no es transcribir pensamientos. Es descubrirlos.",
-  },
-  {
-    slug: "el-valor-del-silencio-digital",
-    title: "El valor del silencio digital",
-    date: "2026-02-20",
-    content: "Hay una diferencia entre estar desconectado y estar en silencio.",
-  },
-];
+function parseFrontmatter(raw: string): { data: Record<string, string>; body: string } {
+  if (!raw.startsWith("---")) return { data: {}, body: raw };
+  const end = raw.indexOf("---", 3);
+  if (end === -1) return { data: {}, body: raw };
+  const frontmatter = raw.slice(3, end).trim();
+  const body = raw.slice(end + 3).trim();
+  const data: Record<string, string> = {};
+  for (const line of frontmatter.split("\n")) {
+    const colonIdx = line.indexOf(":");
+    if (colonIdx > 0) {
+      data[line.slice(0, colonIdx).trim()] = line.slice(colonIdx + 1).trim();
+    }
+  }
+  return { data, body };
+}
+
+function collectMarkdownFiles(dir: string): string[] {
+  const files: string[] = [];
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const fullPath = join(dir, entry.name);
+    if (entry.isDirectory()) {
+      files.push(...collectMarkdownFiles(fullPath));
+    } else if (entry.name.endsWith(".md")) {
+      files.push(fullPath);
+    }
+  }
+  return files;
+}
+
+function loadPosts(): Post[] {
+  const postsDir = resolve(process.cwd(), "posts");
+  return collectMarkdownFiles(postsDir)
+    .map((file) => {
+      const { data, body } = parseFrontmatter(readFileSync(file, "utf-8"));
+      return {
+        slug: data.slug ?? "",
+        title: data.title ?? "",
+        date: data.date ?? "",
+        content: body,
+      };
+    })
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+}
 
 const SITE_URL = "https://vmhq.blog";
 
@@ -39,12 +62,8 @@ function escapeXml(str: string): string {
     .replace(/"/g, "&quot;");
 }
 
-function generateRSS(): string {
-  const sorted = [...posts].sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-  );
-
-  const items = sorted
+function generateRSS(posts: Post[]): string {
+  const items = posts
     .map(
       (post) => `    <item>
       <title>${escapeXml(post.title)}</title>
@@ -68,15 +87,11 @@ ${items}
 </rss>`;
 }
 
-function generateSitemap(): string {
-  const sorted = [...posts].sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-  );
-
+function generateSitemap(posts: Post[]): string {
   const urls = [
     `  <url><loc>${SITE_URL}/</loc></url>`,
     `  <url><loc>${SITE_URL}/about</loc></url>`,
-    ...sorted.map(
+    ...posts.map(
       (post) =>
         `  <url><loc>${SITE_URL}/post/${post.slug}</loc><lastmod>${post.date}</lastmod></url>`
     ),
@@ -88,11 +103,12 @@ ${urls}
 </urlset>`;
 }
 
+const posts = loadPosts();
 const outDir = join(process.cwd(), "public");
 mkdirSync(outDir, { recursive: true });
 
-writeFileSync(join(outDir, "rss.xml"), generateRSS(), "utf-8");
+writeFileSync(join(outDir, "rss.xml"), generateRSS(posts), "utf-8");
 console.log("Generated public/rss.xml");
 
-writeFileSync(join(outDir, "sitemap.xml"), generateSitemap(), "utf-8");
+writeFileSync(join(outDir, "sitemap.xml"), generateSitemap(posts), "utf-8");
 console.log("Generated public/sitemap.xml");

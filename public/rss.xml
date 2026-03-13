@@ -6,25 +6,44 @@
     <description>Un espacio para pensar en voz alta.</description>
     <language>es</language>
     <item>
+      <title>Post de prueba</title>
+      <link>https://vmhq.blog/post/post-de-prueba</link>
+      <guid>https://vmhq.blog/post/post-de-prueba</guid>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 GMT</pubDate>
+      <description>Este es un post de prueba publicado para validar el flujo de publicación en el repositorio.
+
+Si estás leyendo esto en producción, significa que la ruta, el render y el despliegue están funcionando cor...</description>
+    </item>
+    <item>
       <title>Sobre la simplicidad</title>
       <link>https://vmhq.blog/post/sobre-la-simplicidad</link>
       <guid>https://vmhq.blog/post/sobre-la-simplicidad</guid>
       <pubDate>Tue, 10 Mar 2026 00:00:00 GMT</pubDate>
-      <description>La simplicidad no es la ausencia de complejidad, sino su resolución....</description>
+      <description>La simplicidad no es la ausencia de complejidad, sino su resolución. Cuando eliminamos lo innecesario, lo que queda no es menos — es más claro.
+
+## El problema del exceso
+
+Vivimos rodeados de interfac...</description>
     </item>
     <item>
       <title>Notas sobre la escritura</title>
       <link>https://vmhq.blog/post/notas-sobre-la-escritura</link>
       <guid>https://vmhq.blog/post/notas-sobre-la-escritura</guid>
       <pubDate>Thu, 05 Mar 2026 00:00:00 GMT</pubDate>
-      <description>Escribir no es transcribir pensamientos. Es descubrirlos....</description>
+      <description>Escribir no es transcribir pensamientos. Es descubrirlos.
+
+Cuando me siento frente a una página en blanco, no sé lo que voy a decir. El acto de formular una frase me obliga a precisar lo que antes era...</description>
     </item>
     <item>
       <title>El valor del silencio digital</title>
       <link>https://vmhq.blog/post/el-valor-del-silencio-digital</link>
       <guid>https://vmhq.blog/post/el-valor-del-silencio-digital</guid>
       <pubDate>Fri, 20 Feb 2026 00:00:00 GMT</pubDate>
-      <description>Hay una diferencia entre estar desconectado y estar en silencio....</description>
+      <description>Hay una diferencia entre estar desconectado y estar en silencio. La desconexión es una ausencia. El silencio es una presencia deliberada.
+
+## Ruido
+
+La web moderna es ruidosa. No en el sentido literal...</description>
     </item>
   </channel>
 </rss>
