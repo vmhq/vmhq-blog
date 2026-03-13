@@ -7,32 +7,35 @@ A minimal blog built with Vite + React + TypeScript + Tailwind CSS + shadcn/ui. 
 ## Build & Development Commands
 
 ```bash
+# Install dependencies
+bun install
+
 # Development server (runs on port 8080)
-npm run dev
+bun run dev
 
 # Production build
-npm run build
+bun run build
 
 # Development build
-npm run build:dev
+bun run build:dev
 
 # Preview production build
-npm run preview
+bun run preview
 
 # Linting
-npm run lint
+bun run lint
 
 # Run all tests once
-npm run test
+bun run test
 
 # Run tests in watch mode
-npm run test:watch
+bun run test:watch
 
 # Run a single test file
-npx vitest run src/path/to/file.test.ts
+bunx vitest run src/path/to/file.test.ts
 
 # Run tests matching a pattern
-npx vitest run --testNamePattern="pattern"
+bunx vitest run --testNamePattern="pattern"
 ```
 
 ## Project Structure
@@ -134,7 +137,7 @@ Button.displayName = "Button";
 
 ## shadcn/ui Guidelines
 
-- Use `npx shadcn add <component>` to add new components
+- Use `bunx shadcn add <component>` to add new components
 - Do not modify files in `src/components/ui/` directly
 - Create wrapper components in `src/components/` if customization needed
 
