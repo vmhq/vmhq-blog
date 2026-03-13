@@ -12,7 +12,7 @@ const PostPage = () => {
 
   if (!post) return <Navigate to="/" replace />;
 
-  const description = post.content.replace(/[#>*`\-_\[\]]/g, "").trim().slice(0, 160);
+  const description = post.content.replace(/[#>*`\-_[\]]/g, "").trim().slice(0, 160);
   const url = `${window.location.origin}/post/${post.slug}`;
 
   return (
