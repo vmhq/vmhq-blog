@@ -21,7 +21,7 @@ const Index = () => {
   return (
     <BlogLayout>
       <Helmet>
-        <title>Reflexiones Minimalistas — vmhq</title>
+        <title>vmhq</title>
         <meta name="description" content="Blog personal minimalista. Reflexiones sobre diseño, tecnología y escritura." />
       </Helmet>
       <div className="space-y-8">

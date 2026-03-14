@@ -33,7 +33,7 @@ const PostPage = () => {
   return (
     <BlogLayout>
       <Helmet>
-        <title>{post.title} — Reflexiones Minimalistas</title>
+        <title>{post.title} — vmhq</title>
         <meta name="description" content={description} />
         <meta property="og:title" content={post.title} />
         <meta property="og:description" content={description} />

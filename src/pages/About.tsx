@@ -5,7 +5,7 @@ const About = () => {
   return (
     <BlogLayout>
       <Helmet>
-        <title>Acerca de — Reflexiones Minimalistas</title>
+        <title>Acerca — vmhq</title>
         <meta name="description" content="Sobre vmhq: un espacio personal para pensar en voz alta sobre diseño, tecnología y escritura." />
       </Helmet>
       <article className="prose">
