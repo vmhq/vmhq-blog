@@ -69,7 +69,21 @@ function loadPosts(): Post[] {
     .sort((a, b) => getPostTimestamp(b) - getPostTimestamp(a));
 }
 
-const SITE_URL = "https://vmhq.blog";
+// Resolve site URL from Vercel environment variables at build time.
+// VERCEL_PROJECT_PRODUCTION_URL is the primary production domain assigned to
+// the project (e.g. "vmhq-blog.vercel.app" or a custom domain like "vmhq.blog").
+// VERCEL_URL is the unique deployment URL for preview/branch deploys.
+// The fallback guarantees the script still works in local development.
+const SITE_URL = (() => {
+  const raw =
+    process.env.VERCEL_PROJECT_PRODUCTION_URL ??
+    process.env.VERCEL_URL ??
+    "localhost:8080";
+  // Vercel env vars don't include the protocol
+  return raw.startsWith("http") ? raw : `https://${raw}`;
+})();
+
+console.log(`Using SITE_URL: ${SITE_URL}`);
 
 function escapeXml(str: string): string {
   return str
