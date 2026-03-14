@@ -78,6 +78,42 @@ El orden del blog se define por `date` y, si existe, también por `time` (más r
 
 Para publicar un nuevo post, basta con crear el archivo `.md` en la carpeta correspondiente y hacer build. El sistema lo recoge automáticamente.
 
+## Imágenes en posts
+
+Los posts soportan imágenes en Markdown.
+
+### Convención recomendada
+
+Guardar imágenes locales en:
+
+```bash
+public/images/posts/
+```
+
+Ejemplo:
+
+```bash
+public/images/posts/bun-dashboard.png
+```
+
+Y referenciarlas así dentro del post:
+
+```md
+![Dashboard de Bun](/images/posts/bun-dashboard.png)
+```
+
+También se pueden usar imágenes remotas:
+
+```md
+![Captura](https://example.com/imagen.jpg)
+```
+
+### Nota práctica
+
+- Preferir imágenes locales para contenido propio del blog
+- Usar nombres de archivo simples, en minúsculas y con guiones
+- Si un post usa varias imágenes, puedes agruparlas con prefijos o subcarpetas dentro de `public/images/posts/`
+
 ## Vercel
 
 El proyecto está configurado para desplegar con **Bun** en Vercel:

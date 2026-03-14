@@ -41,6 +41,8 @@ bunx vitest run --testNamePattern="pattern"
 ## Project Structure
 
 ```
+posts/             # Markdown posts
+public/images/posts/  # Local images referenced from Markdown posts
 src/
   components/       # React components
     ui/            # shadcn/ui components (do not modify directly)
