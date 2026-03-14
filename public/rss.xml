@@ -13,6 +13,13 @@
       <description>JavaScript tiene un problema viejo: demasiadas herramientas haciendo cosas distintas. Node.js para ejecutar, npm para instalar, Webpack o Vite para construir, Jest para testear. Cada una funciona, per...</description>
     </item>
     <item>
+      <title>Modernizando el blog con Bun, Vite 8 y React 19</title>
+      <link>https://vmhq.blog/post/modernizando-el-blog-con-bun-vite-8-y-react-19</link>
+      <guid>https://vmhq.blog/post/modernizando-el-blog-con-bun-vite-8-y-react-19</guid>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 GMT</pubDate>
+      <description>Hay una diferencia entre mantener un proyecto funcionando y mantenerlo vivo. Lo primero basta para que no se caiga. Lo segundo exige revisar herramientas, dependencias y decisiones que alguna vez fuer...</description>
+    </item>
+    <item>
       <title>Post de prueba</title>
       <link>https://vmhq.blog/post/post-de-prueba</link>
       <guid>https://vmhq.blog/post/post-de-prueba</guid>
