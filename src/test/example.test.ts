@@ -26,9 +26,9 @@ describe("getAllPosts", () => {
 
 describe("getPostBySlug", () => {
   it("returns post for valid slug", () => {
-    const post = getPostBySlug("sobre-la-simplicidad");
+    const post = getPostBySlug("modernizando-el-blog-con-bun-vite-8-y-react-19");
     expect(post).toBeDefined();
-    expect(post!.title).toBe("Sobre la simplicidad");
+    expect(post!.title).toBe("Modernizando el blog con Bun, Vite 8 y React 19");
   });
 
   it("returns undefined for invalid slug", () => {
@@ -55,4 +55,3 @@ describe("readingTime", () => {
     expect(readingTime(words)).toBe("2 min de lectura");
   });
 });
-
