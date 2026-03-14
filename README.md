@@ -1,18 +1,19 @@
 # vmhq — Reflexiones Minimalistas
 
-A minimalist personal blog built with Vite, React, TypeScript, Tailwind CSS, and **Bun**.
+A minimalist personal blog built with Bun, React 19, Vite 8, TypeScript, and Tailwind CSS 4.
 
 ## Tech Stack
 
-- **Bun** — package manager and runtime
-- **Vite** — build tool and dev server
-- **React 18** — UI library with StrictMode enabled
-- **TypeScript** — strict mode
-- **Tailwind CSS** — utility-first styling
+- **Bun 1.x** — package manager and runtime
+- **Vite 8** — build tool and dev server
+- **React 19** — UI library with StrictMode enabled
+- **TypeScript 5.9** — strict mode
+- **Tailwind CSS 4** — utility-first styling
 - **react-helmet-async** — per-page SEO meta tags
 - **react-markdown** + remark-gfm — Markdown rendering
-- **Vitest** — unit testing
+- **Vitest 4** — unit testing
 - **Vercel Analytics** — privacy-friendly page analytics
+- **Vercel Speed Insights** — real-user performance metrics
 
 ## Getting Started
 
@@ -81,6 +82,13 @@ El proyecto está configurado para desplegar con **Bun** en Vercel:
 - `installCommand`: `bun install`
 - `buildCommand`: `bun run build`
 - `outputDirectory`: `dist`
+- SPA rewrite a `index.html` para rutas del blog
+
+Además, el proyecto incluye:
+- **Vercel Analytics** para tráfico y páginas vistas
+- **Vercel Speed Insights** para métricas reales de rendimiento
+
+No fue necesario cambiar más archivos para el despliegue: `vercel.json` ya quedó alineado con Bun + Vite.
 
 ## Build-Time Generation
 

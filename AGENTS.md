@@ -1,8 +1,8 @@
-# Agent Guidelines for minimalist-musings
+# Agent Guidelines for vmhq-blog
 
 ## Project Overview
 
-A minimal blog built with Vite + React + TypeScript + Tailwind CSS + shadcn/ui. Content is in Spanish, code in English.
+A minimal blog built with Bun + Vite 8 + React 19 + TypeScript + Tailwind CSS 4. Content is in Spanish, code in English.
 
 ## Build & Development Commands
 
