@@ -12,6 +12,12 @@ const PostPage = () => {
   const post = slug ? getPostBySlug(slug) : undefined;
   const [showBackToTop, setShowBackToTop] = useState(false);
 
+  const pageTitle = post ? `${post.title} \u2014 vmhq` : "vmhq";
+
+  useEffect(() => {
+    document.title = pageTitle;
+  }, [pageTitle]);
+
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
@@ -33,7 +39,7 @@ const PostPage = () => {
   return (
     <BlogLayout>
       <Helmet>
-        <title>{post.title} — vmhq</title>
+        <title>{pageTitle}</title>
         <meta name="description" content={description} />
         <meta property="og:title" content={post.title} />
         <meta property="og:description" content={description} />
