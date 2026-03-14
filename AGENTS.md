@@ -43,6 +43,7 @@ bunx vitest run --testNamePattern="pattern"
 ```
 posts/             # Markdown posts
 public/images/posts/  # Local images referenced from Markdown posts
+public/favicon.svg    # Adaptive SVG favicon (dark/light via prefers-color-scheme)
 src/
   components/       # React components
     ui/            # shadcn/ui components (do not modify directly)
@@ -50,7 +51,58 @@ src/
   lib/             # Utility functions and data
   hooks/           # Custom React hooks
   test/            # Test files and setup.ts
+scripts/
+  generate-feeds.ts   # Build-time RSS + sitemap (SITE_URL from Vercel env vars)
 ```
+
+## Critical Conventions
+
+### UTF-8 in JSX
+
+Always use literal UTF-8 characters in JSX text content:
+
+```tsx
+// CORRECT
+<p>La tecnología y la inteligencia artificial</p>
+
+// WRONG — renders as literal backslash sequences
+<p>La tecnolog\u00eda y la inteligencia artificial</p>
+```
+
+Unicode escapes like `\u2014` are fine inside JS string expressions (e.g. `document.title = "Acerca \u2014 vmhq"`).
+
+### Page Titles
+
+Set `document.title` via `useEffect` as the primary mechanism. `react-helmet-async` does not reliably override the static `<title>` from `index.html`.
+
+```tsx
+const pageTitle = post ? `${post.title} \u2014 vmhq` : "vmhq";
+
+useEffect(() => {
+  document.title = pageTitle;
+}, [pageTitle]);
+```
+
+Keep `<Helmet><title>` in sync for SEO meta tags.
+
+### Frontmatter
+
+Post titles do **not** need quotes, even with colons:
+
+```md
+---
+title: La IA como colega silencioso: automatización al servicio del juicio profesional
+slug: ia-colega-silencioso
+date: 2026-03-14
+time: 03:25:00
+---
+```
+
+The parser splits on the first `:` only.
+
+### SITE_URL
+
+`scripts/generate-feeds.ts` resolves the site URL dynamically from Vercel env vars. **Never hardcode a domain.** Priority: `VERCEL_PROJECT_PRODUCTION_URL` > `VERCEL_URL` > `localhost:8080`.
 
 ## Code Style Guidelines
 

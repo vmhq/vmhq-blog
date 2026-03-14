@@ -1,6 +1,8 @@
-# vmhq — Reflexiones Minimalistas
+# vmhq
 
-A minimalist personal blog built with Bun, React 19, Vite 8, TypeScript, and Tailwind CSS 4.
+Blog personal minimalista. Reflexiones sobre tecnología e inteligencia artificial como herramientas al servicio de las personas.
+
+Built with Bun, React 19, Vite 8, TypeScript, and Tailwind CSS 4.
 
 ## Tech Stack
 
@@ -52,6 +54,8 @@ src/
 └── index.css       # Global styles and CSS variables
 scripts/
 └── generate-feeds.ts   # Build-time RSS and sitemap generation
+public/
+└── favicon.svg         # Adaptive SVG favicon (dark/light)
 ```
 
 ## Posts
@@ -59,22 +63,24 @@ scripts/
 Los posts son archivos Markdown individuales organizados por año y mes:
 
 ```
-posts/2026/marzo/sobre_la_simplicidad_10_03.md
+posts/2026/marzo/ia_colega_silencioso_14_03.md
 ```
 
 Cada archivo usa frontmatter YAML:
 
 ```markdown
 ---
-title: Título del post
-slug: titulo-del-post
-date: 2026-03-10
-time: 21:35:00   # opcional, recomendado si publicas más de un post el mismo día
+title: La IA como colega silencioso
+slug: ia-colega-silencioso
+date: 2026-03-14
+time: 03:25:00   # opcional, recomendado si publicas más de un post el mismo día
 ---
 Contenido en Markdown...
 ```
 
-El orden del blog se define por `date` y, si existe, también por `time` (más reciente primero).
+Notas sobre frontmatter:
+- El `title` no necesita comillas, incluso si contiene dos puntos (`:`). El parser usa el primer `:` como separador clave-valor y toma el resto como valor.
+- El orden del blog se define por `date` y, si existe, también por `time` (más reciente primero).
 
 Para publicar un nuevo post, basta con crear el archivo `.md` en la carpeta correspondiente y hacer build. El sistema lo recoge automáticamente.
 
@@ -90,16 +96,10 @@ Guardar imágenes locales en:
 public/images/posts/
 ```
 
-Ejemplo:
-
-```bash
-public/images/posts/bun-dashboard.png
-```
-
 Y referenciarlas así dentro del post:
 
 ```md
-![Dashboard de Bun](/images/posts/bun-dashboard.png)
+![Descripción](/images/posts/nombre-imagen.png)
 ```
 
 También se pueden usar imágenes remotas:
@@ -114,6 +114,21 @@ También se pueden usar imágenes remotas:
 - Usar nombres de archivo simples, en minúsculas y con guiones
 - Si un post usa varias imágenes, puedes agruparlas con prefijos o subcarpetas dentro de `public/images/posts/`
 
+## Favicon
+
+El favicon es un SVG minimalista con una "V" estilizada que se adapta automáticamente al tema del sistema operativo usando `@media (prefers-color-scheme: dark)` embebido en el SVG:
+
+- **Light mode**: trazo `#222`
+- **Dark mode**: trazo `#ccc`
+
+El `index.html` referencia `favicon.svg` como primario y `favicon.ico` como fallback.
+
+## Page Titles
+
+El título de cada página se establece con `document.title` via `useEffect` como mecanismo principal, ya que `react-helmet-async` no siempre sobreescribe el `<title>` estático del `index.html`. El Helmet se mantiene para los meta tags de SEO/OG.
+
+Formato: `{Título del post} — vmhq` en posts, `vmhq` en el index.
+
 ## Vercel
 
 El proyecto está configurado para desplegar con **Bun** en Vercel:
@@ -127,13 +142,15 @@ Además, el proyecto incluye:
 - **Vercel Analytics** para tráfico y páginas vistas
 - **Vercel Speed Insights** para métricas reales de rendimiento
 
-No fue necesario cambiar más archivos para el despliegue: `vercel.json` ya quedó alineado con Bun + Vite.
-
 ## Build-Time Generation
 
 El script `prebuild` corre antes de cada build y genera:
 - `public/rss.xml` — RSS 2.0 feed (a partir de los archivos `.md`)
 - `public/sitemap.xml` — XML sitemap
+
+El `SITE_URL` se resuelve dinámicamente desde las variables de entorno de Vercel (`VERCEL_PROJECT_PRODUCTION_URL` o `VERCEL_URL`), sin dominio hardcodeado. Fallback a `localhost:8080` para desarrollo local.
+
+El RSS incluye un bloque `<image>` apuntando al favicon SVG del sitio.
 
 ## License
 
