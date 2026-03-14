@@ -1,5 +1,5 @@
 ---
-title: "La IA como colega silencioso: automatización al servicio del juicio profesional"
+title: La IA como colega silencioso: automatización al servicio del juicio profesional
 slug: ia-colega-silencioso
 date: 2026-03-14
 time: 03:25:00
