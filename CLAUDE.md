@@ -54,6 +54,7 @@ Each post uses frontmatter:
 title: Título del post
 slug: titulo-del-post
 date: 2026-03-13
+time: 21:35:00   # optional, recommended for ordering posts from the same day
 ---
 ```
 

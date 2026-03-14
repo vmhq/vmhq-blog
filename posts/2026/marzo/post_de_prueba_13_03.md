@@ -2,6 +2,7 @@
 title: Post de prueba
 slug: post-de-prueba
 date: 2026-03-13
+time: 22:33:29
 ---
 Este es un post de prueba publicado para validar el flujo de publicación en el repositorio.
 

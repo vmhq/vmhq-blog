@@ -69,9 +69,12 @@ Cada archivo usa frontmatter YAML:
 title: Título del post
 slug: titulo-del-post
 date: 2026-03-10
+time: 21:35:00   # opcional, recomendado si publicas más de un post el mismo día
 ---
 Contenido en Markdown...
 ```
+
+El orden del blog se define por `date` y, si existe, también por `time` (más reciente primero).
 
 Para publicar un nuevo post, basta con crear el archivo `.md` en la carpeta correspondiente y hacer build. El sistema lo recoge automáticamente.
 

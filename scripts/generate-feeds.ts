@@ -5,6 +5,7 @@ interface Post {
   slug: string;
   title: string;
   date: string;
+  time?: string;
   content: string;
 }
 
@@ -37,6 +38,21 @@ function collectMarkdownFiles(dir: string): string[] {
   return files;
 }
 
+function getPostTimestamp(post: Pick<Post, "date" | "time">): number {
+  if (!post.date) return 0;
+  const normalized = post.date.includes("T")
+    ? post.date
+    : post.time
+      ? `${post.date}T${post.time}`
+      : `${post.date}T00:00:00`;
+  const ts = new Date(normalized).getTime();
+  return Number.isNaN(ts) ? 0 : ts;
+}
+
+function getPostLastMod(post: Pick<Post, "date" | "time">): string {
+  return post.time ? `${post.date}T${post.time}` : post.date;
+}
+
 function loadPosts(): Post[] {
   const postsDir = resolve(process.cwd(), "posts");
   return collectMarkdownFiles(postsDir)
@@ -46,10 +62,11 @@ function loadPosts(): Post[] {
         slug: data.slug ?? "",
         title: data.title ?? "",
         date: data.date ?? "",
+        time: data.time ?? undefined,
         content: body,
       };
     })
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    .sort((a, b) => getPostTimestamp(b) - getPostTimestamp(a));
 }
 
 const SITE_URL = "https://vmhq.blog";
@@ -69,7 +86,7 @@ function generateRSS(posts: Post[]): string {
       <title>${escapeXml(post.title)}</title>
       <link>${SITE_URL}/post/${post.slug}</link>
       <guid>${SITE_URL}/post/${post.slug}</guid>
-      <pubDate>${new Date(post.date).toUTCString()}</pubDate>
+      <pubDate>${new Date(getPostLastMod(post)).toUTCString()}</pubDate>
       <description>${escapeXml(post.content.slice(0, 200))}...</description>
     </item>`
     )
@@ -93,7 +110,7 @@ function generateSitemap(posts: Post[]): string {
     `  <url><loc>${SITE_URL}/about</loc></url>`,
     ...posts.map(
       (post) =>
-        `  <url><loc>${SITE_URL}/post/${post.slug}</loc><lastmod>${post.date}</lastmod></url>`
+        `  <url><loc>${SITE_URL}/post/${post.slug}</loc><lastmod>${getPostLastMod(post)}</lastmod></url>`
     ),
   ].join("\n");
 

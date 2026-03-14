@@ -1,5 +1,6 @@
 export function formatDate(dateStr: string): string {
-  const d = new Date(dateStr);
+  const normalized = dateStr.includes("T") ? dateStr : `${dateStr}T00:00:00`;
+  const d = new Date(normalized);
   return d.toLocaleDateString("es-ES", { year: "numeric", month: "long", day: "numeric" });
 }
 

@@ -2,6 +2,7 @@
 title: Bun, el runtime que quiere reemplazarlo todo
 slug: bun-el-runtime-que-quiere-reemplazarlo-todo
 date: 2026-03-13
+time: 20:04:30
 ---
 JavaScript tiene un problema viejo: demasiadas herramientas haciendo cosas distintas. Node.js para ejecutar, npm para instalar, Webpack o Vite para construir, Jest para testear. Cada una funciona, pero juntas forman un ecosistema fragmentado que consume tiempo y configuración.
 

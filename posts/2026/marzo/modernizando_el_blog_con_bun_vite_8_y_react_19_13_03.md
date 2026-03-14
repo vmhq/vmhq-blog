@@ -2,6 +2,7 @@
 title: Modernizando el blog con Bun, Vite 8 y React 19
 slug: modernizando-el-blog-con-bun-vite-8-y-react-19
 date: 2026-03-13
+time: 23:23:20
 ---
 Hay una diferencia entre mantener un proyecto funcionando y mantenerlo vivo. Lo primero basta para que no se caiga. Lo segundo exige revisar herramientas, dependencias y decisiones que alguna vez fueron razonables, pero que con el tiempo empiezan a quedarse atrás.
 
