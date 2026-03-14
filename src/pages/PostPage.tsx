@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useParams, Navigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -9,6 +10,20 @@ import { formatDate } from "@/lib/formatters";
 const PostPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const post = slug ? getPostBySlug(slug) : undefined;
+  const [showBackToTop, setShowBackToTop] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const nearEnd = docHeight > 0 && scrollTop / docHeight > 0.45;
+      setShowBackToTop(nearEnd);
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   if (!post) return <Navigate to="/" replace />;
 
@@ -38,6 +53,18 @@ const PostPage = () => {
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
         </div>
       </article>
+
+      <button
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        aria-label="Volver arriba"
+        title="Volver arriba"
+        className={`fixed bottom-6 right-6 z-40 inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background/85 text-muted-foreground shadow-sm backdrop-blur-sm transition-all hover:text-foreground hover:border-foreground/30 ${showBackToTop ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-2 opacity-0"}`}
+      >
+        <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 19V5" />
+          <path d="m5 12 7-7 7 7" />
+        </svg>
+      </button>
     </BlogLayout>
   );
 };
