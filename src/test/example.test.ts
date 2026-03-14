@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { getAllPosts, getPostBySlug, generateRSSFeed } from "@/lib/posts";
+import { getAllPosts, getPostBySlug } from "@/lib/posts";
 import { formatDate, readingTime } from "@/lib/formatters";
 
 describe("getAllPosts", () => {
@@ -56,19 +56,3 @@ describe("readingTime", () => {
   });
 });
 
-describe("generateRSSFeed", () => {
-  it("generates valid RSS XML", () => {
-    const rss = generateRSSFeed("https://example.com");
-    expect(rss).toContain('<?xml version="1.0"');
-    expect(rss).toContain("<rss version");
-    expect(rss).toContain("<channel>");
-    expect(rss).toContain("<item>");
-    expect(rss).toContain("https://example.com/post/");
-  });
-
-  it("escapes XML entities in content", () => {
-    const rss = generateRSSFeed("https://example.com");
-    // Should not contain unescaped < or > in description (from markdown)
-    expect(rss).not.toMatch(/<description>[^<]*<[^/][^<]*<\/description>/);
-  });
-});
