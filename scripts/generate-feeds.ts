@@ -113,6 +113,11 @@ function generateRSS(posts: Post[]): string {
     <link>${SITE_URL}</link>
     <description>Un espacio para pensar en voz alta.</description>
     <language>es</language>
+    <image>
+      <url>${SITE_URL}/favicon.svg</url>
+      <title>vmhq</title>
+      <link>${SITE_URL}</link>
+    </image>
 ${items}
   </channel>
 </rss>`;
