@@ -29,9 +29,9 @@ const Index = () => {
           <p className="text-muted-foreground">No hay posts disponibles.</p>
         )}
         {paginated.map((post) => (
-          <article key={post.slug}>
+          <article key={post.slug} aria-labelledby={`post-title-${post.slug}`}>
             <Link to={`/post/${post.slug}`} className="group block no-underline">
-              <h2 className="article-title font-display text-xl font-bold tracking-tight group-hover:text-muted-foreground transition-colors duration-150">
+              <h2 id={`post-title-${post.slug}`} className="article-title font-display text-xl font-bold tracking-tight group-hover:text-muted-foreground transition-colors duration-150">
                 {post.title}
               </h2>
               <div className="flex items-center gap-3 text-sm text-muted-foreground mt-1">
@@ -45,7 +45,7 @@ const Index = () => {
       </div>
 
       {totalPages > 1 && (
-        <nav className="flex items-center justify-center gap-4 mt-12 text-sm text-muted-foreground">
+        <nav aria-label="Paginación" className="flex items-center justify-center gap-4 mt-12 text-sm text-muted-foreground">
           <button
             onClick={() => goToPage(currentPage - 1)}
             disabled={currentPage <= 1}

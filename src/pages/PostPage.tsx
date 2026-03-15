@@ -83,7 +83,7 @@ const PostPage = () => {
       </article>
 
       {(adjacent.prev || adjacent.next) && (
-        <nav className="mt-16 pt-8 border-t border-border grid grid-cols-2 gap-4 text-sm">
+        <nav aria-label="Navegación entre posts" className="mt-16 pt-8 border-t border-border grid grid-cols-2 gap-4 text-sm">
           <div>
             {adjacent.next && (
               <Link
@@ -117,7 +117,7 @@ const PostPage = () => {
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         aria-label="Volver arriba"
         title="Volver arriba"
-        className={`fixed bottom-6 right-6 z-40 inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background/85 text-muted-foreground shadow-sm backdrop-blur-sm transition-all hover:text-foreground hover:border-foreground/30 ${showBackToTop ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-2 opacity-0"}`}
+        className={`fixed bottom-6 right-6 z-40 inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background text-muted-foreground shadow-sm transition-all hover:text-foreground hover:border-foreground/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2 ${showBackToTop ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-2 opacity-0"}`}
       >
         <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
           <path d="M12 19V5" />

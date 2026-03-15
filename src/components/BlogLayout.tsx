@@ -77,7 +77,7 @@ const BlogLayout = ({ children }: BlogLayoutProps) => {
             onClick={cycleTheme}
             aria-label={`Cambiar tema. Actual: ${themeLabel}`}
             title={`Tema: ${themeLabel}`}
-            className="inline-flex items-center justify-center rounded-full border border-border p-2 text-sm text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-colors"
+            className="inline-flex items-center justify-center rounded-full border border-border p-2 min-h-[44px] min-w-[44px] text-sm text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2"
           >
             {theme === "system" ? <SystemIcon /> : resolvedTheme === "dark" ? <MoonIcon /> : <SunIcon />}
           </button>
@@ -94,7 +94,7 @@ const BlogLayout = ({ children }: BlogLayoutProps) => {
           <Link to="/about" className="underline underline-offset-2 hover:text-foreground">
             Acerca
           </Link>
-          <a href="/rss.xml" className="underline underline-offset-2 hover:text-foreground">
+          <a href="/rss.xml" type="application/rss+xml" className="underline underline-offset-2 hover:text-foreground">
             RSS
           </a>
           <a href="https://github.com/vmhq" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-foreground">
