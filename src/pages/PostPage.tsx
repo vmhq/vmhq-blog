@@ -81,7 +81,7 @@ const PostPage = () => {
                 to={`/post/${adjacent.next.slug}`}
                 className="group flex flex-col gap-1 text-muted-foreground hover:text-foreground transition-colors"
               >
-                <span className="text-xs uppercase tracking-wide">← Anterior</span>
+                <span className="text-xs uppercase tracking-wide">← Más antiguo</span>
                 <span className="font-medium line-clamp-2 group-hover:underline underline-offset-2">
                   {adjacent.next.title}
                 </span>
@@ -94,7 +94,7 @@ const PostPage = () => {
                 to={`/post/${adjacent.prev.slug}`}
                 className="group flex flex-col gap-1 text-muted-foreground hover:text-foreground transition-colors items-end"
               >
-                <span className="text-xs uppercase tracking-wide">Siguiente →</span>
+                <span className="text-xs uppercase tracking-wide">Más reciente →</span>
                 <span className="font-medium line-clamp-2 group-hover:underline underline-offset-2">
                   {adjacent.prev.title}
                 </span>
