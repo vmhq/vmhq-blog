@@ -1,12 +1,7 @@
-import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import BlogLayout from "@/components/BlogLayout";
 
 const About = () => {
-  useEffect(() => {
-    document.title = "Acerca \u2014 vmhq";
-  }, []);
-
   return (
     <BlogLayout>
       <Helmet>
@@ -14,7 +9,7 @@ const About = () => {
         <meta name="description" content="Reflexiones sobre tecnología e inteligencia artificial como herramientas al servicio de las personas." />
       </Helmet>
       <article className="prose">
-        <h1 className="article-title font-display text-3xl font-bold tracking-tight">Acerca</h1>
+        <h1 className="article-title font-display text-3xl sm:text-4xl font-bold tracking-tight leading-tight">Acerca</h1>
         <p className="mt-6">
           Este espacio existe para pensar en voz alta sobre un tema que considero urgente: cómo la tecnología y la inteligencia artificial pueden estar al servicio de las personas, y no al revés.
         </p>

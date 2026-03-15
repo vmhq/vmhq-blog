@@ -63,15 +63,9 @@
     font-family: var(--font-body);
   }
 
-  /* Headline styling - high contrast override */
-  .dark h1.article-title,
-  .dark h1.site-title {
-    color: hsl(0 0% 94%);
-  }
-
-  h1.article-title,
+  /* site-title inherits foreground from design tokens */
   h1.site-title {
-    color: hsl(0 0% 11%);
+    color: hsl(var(--foreground));
   }
 }
 
