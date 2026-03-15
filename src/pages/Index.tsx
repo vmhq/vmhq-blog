@@ -25,6 +25,9 @@ const Index = () => {
         <meta name="description" content="Blog personal minimalista. Reflexiones sobre diseño, tecnología y escritura." />
       </Helmet>
       <div className="space-y-8">
+        {paginated.length === 0 && (
+          <p className="text-muted-foreground">No hay posts disponibles.</p>
+        )}
         {paginated.map((post) => (
           <article key={post.slug}>
             <Link to={`/post/${post.slug}`} className="group block no-underline">

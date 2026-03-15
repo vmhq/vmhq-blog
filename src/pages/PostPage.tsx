@@ -40,7 +40,16 @@ const PostPage = () => {
 
   if (!post) return <Navigate to="/" replace />;
 
-  const description = post.content.replace(/[#>*`\-_[\]]/g, "").trim().slice(0, 160);
+  const description = post.content
+    .replace(/!\[.*?\]\(.*?\)/g, "")          // imágenes
+    .replace(/\[([^\]]+)\]\(.*?\)/g, "$1")    // links → solo texto
+    .replace(/`{1,3}[^`]*`{1,3}/g, "")        // código inline y bloques
+    .replace(/^#{1,6}\s+/gm, "")              // headings
+    .replace(/[*_~>|]/g, "")                  // énfasis, blockquotes, tablas
+    .replace(/&[a-z]+;/gi, " ")               // entidades HTML
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 160);
   const url = `${window.location.origin}/post/${post.slug}`;
 
   return (
