@@ -18,6 +18,10 @@ const PostPage = () => {
   const pageTitle = post ? `${post.title} \u2014 vmhq` : "vmhq";
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [slug]);
+
+  useEffect(() => {
     document.title = pageTitle;
   }, [pageTitle]);
 
