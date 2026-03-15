@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://vmhq.blog/</loc></url>
-  <url><loc>https://vmhq.blog/about</loc></url>
-  <url><loc>https://vmhq.blog/post/modernizando-el-blog-con-bun-vite-8-y-react-19</loc><lastmod>2026-03-13T23:23:20</lastmod></url>
-  <url><loc>https://vmhq.blog/post/post-de-prueba</loc><lastmod>2026-03-13T22:33:29</lastmod></url>
-  <url><loc>https://vmhq.blog/post/bun-el-runtime-que-quiere-reemplazarlo-todo</loc><lastmod>2026-03-13T20:04:30</lastmod></url>
-  <url><loc>https://vmhq.blog/post/sobre-la-simplicidad</loc><lastmod>2026-03-10</lastmod></url>
-  <url><loc>https://vmhq.blog/post/notas-sobre-la-escritura</loc><lastmod>2026-03-05</lastmod></url>
-  <url><loc>https://vmhq.blog/post/el-valor-del-silencio-digital</loc><lastmod>2026-02-20</lastmod></url>
+  <url><loc>https://localhost:8080/</loc></url>
+  <url><loc>https://localhost:8080/about</loc></url>
+  <url><loc>https://localhost:8080/post/ia-colega-silencioso</loc><lastmod>2026-03-14T03:25:00</lastmod></url>
+  <url><loc>https://localhost:8080/post/modernizando-el-blog-con-bun-vite-8-y-react-19</loc><lastmod>2026-03-13T23:23:20</lastmod></url>
 </urlset>

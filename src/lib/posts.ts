@@ -57,3 +57,13 @@ export function getAllPosts(): Post[] {
 export function getPostBySlug(slug: string): Post | undefined {
   return posts.find((p) => p.slug === slug);
 }
+
+export function getAdjacentPosts(slug: string): { prev: Post | null; next: Post | null } {
+  const sorted = getAllPosts(); // newest first
+  const idx = sorted.findIndex((p) => p.slug === slug);
+  if (idx === -1) return { prev: null, next: null };
+  return {
+    prev: idx > 0 ? sorted[idx - 1] : null,           // más reciente
+    next: idx < sorted.length - 1 ? sorted[idx + 1] : null, // más antiguo
+  };
+}

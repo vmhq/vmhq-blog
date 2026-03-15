@@ -1,15 +1,18 @@
 import { useEffect, useState } from "react";
-import { useParams, Navigate } from "react-router-dom";
+import { useParams, Navigate, Link } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import rehypeHighlight from "rehype-highlight";
 import { Helmet } from "react-helmet-async";
 import BlogLayout from "@/components/BlogLayout";
-import { getPostBySlug } from "@/lib/posts";
+import { PreBlock } from "@/components/CodeBlock";
+import { getPostBySlug, getAdjacentPosts } from "@/lib/posts";
 import { formatDate } from "@/lib/formatters";
 
 const PostPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const post = slug ? getPostBySlug(slug) : undefined;
+  const adjacent = slug ? getAdjacentPosts(slug) : { prev: null, next: null };
   const [showBackToTop, setShowBackToTop] = useState(false);
 
   const pageTitle = post ? `${post.title} \u2014 vmhq` : "vmhq";
@@ -56,9 +59,46 @@ const PostPage = () => {
           </time>
         </header>
         <div className="prose">
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            rehypePlugins={[rehypeHighlight]}
+            components={{ pre: PreBlock }}
+          >
+            {post.content}
+          </ReactMarkdown>
         </div>
       </article>
+
+      {(adjacent.prev || adjacent.next) && (
+        <nav className="mt-16 pt-8 border-t border-border grid grid-cols-2 gap-4 text-sm">
+          <div>
+            {adjacent.next && (
+              <Link
+                to={`/post/${adjacent.next.slug}`}
+                className="group flex flex-col gap-1 text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <span className="text-xs uppercase tracking-wide">← Anterior</span>
+                <span className="font-medium line-clamp-2 group-hover:underline underline-offset-2">
+                  {adjacent.next.title}
+                </span>
+              </Link>
+            )}
+          </div>
+          <div className="text-right">
+            {adjacent.prev && (
+              <Link
+                to={`/post/${adjacent.prev.slug}`}
+                className="group flex flex-col gap-1 text-muted-foreground hover:text-foreground transition-colors items-end"
+              >
+                <span className="text-xs uppercase tracking-wide">Siguiente →</span>
+                <span className="font-medium line-clamp-2 group-hover:underline underline-offset-2">
+                  {adjacent.prev.title}
+                </span>
+              </Link>
+            )}
+          </div>
+        </nav>
+      )}
 
       <button
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}

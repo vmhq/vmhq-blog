@@ -2,62 +2,27 @@
 <rss version="2.0">
   <channel>
     <title>vmhq</title>
-    <link>https://vmhq.blog</link>
+    <link>https://localhost:8080</link>
     <description>Un espacio para pensar en voz alta.</description>
     <language>es</language>
+    <image>
+      <url>https://localhost:8080/favicon.svg</url>
+      <title>vmhq</title>
+      <link>https://localhost:8080</link>
+    </image>
+    <item>
+      <title>La IA como colega silencioso: automatización al servicio del juicio profesional</title>
+      <link>https://localhost:8080/post/ia-colega-silencioso</link>
+      <guid>https://localhost:8080/post/ia-colega-silencioso</guid>
+      <pubDate>Sat, 14 Mar 2026 06:25:00 GMT</pubDate>
+      <description>Hay una imagen que persiste cuando se habla de inteligencia artificial en el trabajo: la del programador frente a pantallas oscuras, generando código a velocidad sobrehumana. Es una imagen real, pero ...</description>
+    </item>
     <item>
       <title>Modernizando el blog con Bun, Vite 8 y React 19</title>
-      <link>https://vmhq.blog/post/modernizando-el-blog-con-bun-vite-8-y-react-19</link>
-      <guid>https://vmhq.blog/post/modernizando-el-blog-con-bun-vite-8-y-react-19</guid>
+      <link>https://localhost:8080/post/modernizando-el-blog-con-bun-vite-8-y-react-19</link>
+      <guid>https://localhost:8080/post/modernizando-el-blog-con-bun-vite-8-y-react-19</guid>
       <pubDate>Sat, 14 Mar 2026 02:23:20 GMT</pubDate>
       <description>Hay una diferencia entre mantener un proyecto funcionando y mantenerlo vivo. Lo primero basta para que no se caiga. Lo segundo exige revisar herramientas, dependencias y decisiones que alguna vez fuer...</description>
-    </item>
-    <item>
-      <title>Post de prueba</title>
-      <link>https://vmhq.blog/post/post-de-prueba</link>
-      <guid>https://vmhq.blog/post/post-de-prueba</guid>
-      <pubDate>Sat, 14 Mar 2026 01:33:29 GMT</pubDate>
-      <description>Este es un post de prueba publicado para validar el flujo de publicación en el repositorio.
-
-Si estás leyendo esto en producción, significa que la ruta, el render y el despliegue están funcionando cor...</description>
-    </item>
-    <item>
-      <title>Bun, el runtime que quiere reemplazarlo todo</title>
-      <link>https://vmhq.blog/post/bun-el-runtime-que-quiere-reemplazarlo-todo</link>
-      <guid>https://vmhq.blog/post/bun-el-runtime-que-quiere-reemplazarlo-todo</guid>
-      <pubDate>Fri, 13 Mar 2026 23:04:30 GMT</pubDate>
-      <description>JavaScript tiene un problema viejo: demasiadas herramientas haciendo cosas distintas. Node.js para ejecutar, npm para instalar, Webpack o Vite para construir, Jest para testear. Cada una funciona, per...</description>
-    </item>
-    <item>
-      <title>Sobre la simplicidad</title>
-      <link>https://vmhq.blog/post/sobre-la-simplicidad</link>
-      <guid>https://vmhq.blog/post/sobre-la-simplicidad</guid>
-      <pubDate>Tue, 10 Mar 2026 00:00:00 GMT</pubDate>
-      <description>La simplicidad no es la ausencia de complejidad, sino su resolución. Cuando eliminamos lo innecesario, lo que queda no es menos — es más claro.
-
-## El problema del exceso
-
-Vivimos rodeados de interfac...</description>
-    </item>
-    <item>
-      <title>Notas sobre la escritura</title>
-      <link>https://vmhq.blog/post/notas-sobre-la-escritura</link>
-      <guid>https://vmhq.blog/post/notas-sobre-la-escritura</guid>
-      <pubDate>Thu, 05 Mar 2026 00:00:00 GMT</pubDate>
-      <description>Escribir no es transcribir pensamientos. Es descubrirlos.
-
-Cuando me siento frente a una página en blanco, no sé lo que voy a decir. El acto de formular una frase me obliga a precisar lo que antes era...</description>
-    </item>
-    <item>
-      <title>El valor del silencio digital</title>
-      <link>https://vmhq.blog/post/el-valor-del-silencio-digital</link>
-      <guid>https://vmhq.blog/post/el-valor-del-silencio-digital</guid>
-      <pubDate>Fri, 20 Feb 2026 00:00:00 GMT</pubDate>
-      <description>Hay una diferencia entre estar desconectado y estar en silencio. La desconexión es una ausencia. El silencio es una presencia deliberada.
-
-## Ruido
-
-La web moderna es ruidosa. No en el sentido literal...</description>
     </item>
   </channel>
 </rss>
