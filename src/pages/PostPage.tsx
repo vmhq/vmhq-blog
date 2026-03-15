@@ -15,7 +15,7 @@ const PostPage = () => {
   const adjacent = slug ? getAdjacentPosts(slug) : { prev: null, next: null };
   const [showBackToTop, setShowBackToTop] = useState(false);
 
-  const pageTitle = post ? `${post.title} \u2014 vmhq` : "vmhq";
+  const pageTitle = post ? `${post.title} — vmhq` : "vmhq";
 
   useEffect(() => {
     window.scrollTo(0, 0);

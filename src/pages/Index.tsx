@@ -49,7 +49,7 @@ const Index = () => {
           <button
             onClick={() => goToPage(currentPage - 1)}
             disabled={currentPage <= 1}
-            className="underline underline-offset-2 hover:text-foreground disabled:opacity-30 disabled:no-underline disabled:cursor-default bg-transparent border-none cursor-pointer font-body text-sm text-muted-foreground"
+            className="underline underline-offset-2 hover:text-foreground transition-colors disabled:opacity-30 disabled:no-underline disabled:cursor-default bg-transparent border-none cursor-pointer font-body text-sm text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2 rounded-sm"
           >
             ← Anterior
           </button>
@@ -57,7 +57,7 @@ const Index = () => {
           <button
             onClick={() => goToPage(currentPage + 1)}
             disabled={currentPage >= totalPages}
-            className="underline underline-offset-2 hover:text-foreground disabled:opacity-30 disabled:no-underline disabled:cursor-default bg-transparent border-none cursor-pointer font-body text-sm text-muted-foreground"
+            className="underline underline-offset-2 hover:text-foreground transition-colors disabled:opacity-30 disabled:no-underline disabled:cursor-default bg-transparent border-none cursor-pointer font-body text-sm text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2 rounded-sm"
           >
             Siguiente →
           </button>
