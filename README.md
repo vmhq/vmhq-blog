@@ -12,7 +12,7 @@ Built with Bun, React 19, Vite 8, TypeScript, and Tailwind CSS 4.
 - **TypeScript 5.9** — strict mode
 - **Tailwind CSS 4** — utility-first styling
 - **react-helmet-async** — per-page SEO meta tags
-- **react-markdown** + remark-gfm — Markdown rendering
+- **react-markdown** + remark-gfm + rehype-highlight — Markdown rendering with syntax highlighting
 - **Vitest 4** — unit testing
 - **Vercel Analytics** — privacy-friendly page analytics
 - **Vercel Speed Insights** — real-user performance metrics
@@ -45,7 +45,7 @@ posts/
     └── mes/
         └── nombre_del_post_DD_MM.md   # Posts en Markdown
 src/
-├── components/     # Reusable components (BlogLayout)
+├── components/     # Reusable components (BlogLayout, CodeBlock)
 ├── lib/            # Utilities (posts, formatters, theme, utils)
 ├── pages/          # Route pages (Index, PostPage, About, NotFound)
 ├── test/           # Test files
@@ -141,6 +141,12 @@ El proyecto está configurado para desplegar con **Bun** en Vercel:
 Además, el proyecto incluye:
 - **Vercel Analytics** para tráfico y páginas vistas
 - **Vercel Speed Insights** para métricas reales de rendimiento
+
+## Features
+
+- **Syntax highlighting** — bloques de código con colores por lenguaje (light/dark), usando `rehype-highlight` con tokens integrados en las CSS variables del blog
+- **Botón de copiar** — overlay al hacer hover sobre cualquier bloque de código, copia al portapapeles con feedback visual
+- **Navegación prev/next** — al final de cada post, enlaces al post anterior (más antiguo) y siguiente (más reciente)
 
 ## Build-Time Generation
 
