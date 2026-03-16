@@ -34,8 +34,23 @@ bun run dev
 # Tests
 bun run test
 
-# Build
+# Tests in watch mode
+bun run test:watch
+
+# Run a single test file
+bunx vitest run src/path/to/file.test.ts
+
+# Run tests matching a pattern
+bunx vitest run --testNamePattern="pattern"
+
+# Production build
 bun run build
+
+# Development build
+bun run build:dev
+
+# Preview production build
+bun run preview
 
 # Lint
 bun run lint
@@ -104,6 +119,14 @@ The favicon is an adaptive SVG (`public/favicon.svg`) with `@media (prefers-colo
 - PostCSS uses `@tailwindcss/postcss`
 - Theme tokens are CSS variables in `src/index.css`
 - Dark mode uses the `dark` class and must remain readable
+- Never use arbitrary values (e.g., `w-[100px]`) — use theme tokens instead
+- Use `cn()` from `@/lib/utils` for class merging
+
+## shadcn/ui
+
+- Add new components with `bunx shadcn add <component>`
+- Do **not** modify files in `src/components/ui/` directly
+- Create wrapper components in `src/components/` if customization is needed
 
 ## Vercel
 
