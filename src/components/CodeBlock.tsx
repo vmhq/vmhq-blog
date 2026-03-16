@@ -23,7 +23,7 @@ export const PreBlock = ({
       <button
         onClick={handleCopy}
         aria-label="Copiar código"
-        className="absolute top-2 right-2 px-2 py-1 text-xs font-mono rounded opacity-0 group-hover:opacity-100 transition-opacity bg-background border border-border text-muted-foreground hover:text-foreground hover:border-foreground/30"
+        className="absolute top-2 right-2 px-2 py-1 text-xs font-mono rounded opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity bg-background border border-border text-muted-foreground hover:text-foreground hover:border-foreground/30"
       >
         {copied ? "Copiado" : "Copiar"}
       </button>

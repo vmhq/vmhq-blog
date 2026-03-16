@@ -1,8 +1,13 @@
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import BlogLayout from "@/components/BlogLayout";
 
 const NotFound = () => {
+  useEffect(() => {
+    document.title = "P\u00e1gina no encontrada \u2014 vmhq";
+  }, []);
+
   return (
     <BlogLayout>
       <Helmet>

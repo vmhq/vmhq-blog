@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import BlogLayout from "@/components/BlogLayout";
@@ -12,6 +13,10 @@ const Index = () => {
   const posts = getAllPosts();
   const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE);
   const paginated = posts.slice((currentPage - 1) * POSTS_PER_PAGE, currentPage * POSTS_PER_PAGE);
+
+  useEffect(() => {
+    document.title = "vmhq";
+  }, []);
 
   const goToPage = (page: number) => {
     setSearchParams(page === 1 ? {} : { page: String(page) });
