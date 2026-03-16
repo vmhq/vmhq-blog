@@ -1,6 +1,6 @@
 # vmhq
 
-Blog personal minimalista. Reflexiones sobre tecnología e inteligencia artificial como herramientas al servicio de las personas.
+A minimalist personal blog. Reflections on technology and artificial intelligence as tools in service of people.
 
 Built with Bun, React 19, Vite 8, TypeScript, and Tailwind CSS 4.
 
@@ -42,8 +42,8 @@ The dev server starts at `http://localhost:8080`.
 ```
 posts/
 └── YYYY/
-    └── mes/
-        └── nombre_del_post_DD_MM.md   # Posts en Markdown
+    └── month/
+        └── post-name_DD_MM.md      # Markdown posts (content in Spanish)
 src/
 ├── components/     # Reusable components (BlogLayout, CodeBlock)
 ├── lib/            # Utilities (posts, formatters, theme, utils)
@@ -60,103 +60,103 @@ public/
 
 ## Posts
 
-Los posts son archivos Markdown individuales organizados por año y mes:
+Posts are individual Markdown files organized by year and month:
 
 ```
 posts/2026/marzo/ia_colega_silencioso_14_03.md
 ```
 
-Cada archivo usa frontmatter YAML:
+Each file uses YAML frontmatter:
 
 ```markdown
 ---
 title: La IA como colega silencioso
 slug: ia-colega-silencioso
 date: 2026-03-14
-time: 03:25:00   # opcional, recomendado si publicas más de un post el mismo día
+time: 03:25:00   # optional, recommended when publishing multiple posts on the same day
 ---
-Contenido en Markdown...
+Content in Markdown...
 ```
 
-Notas sobre frontmatter:
-- El `title` no necesita comillas, incluso si contiene dos puntos (`:`). El parser usa el primer `:` como separador clave-valor y toma el resto como valor.
-- El orden del blog se define por `date` y, si existe, también por `time` (más reciente primero).
+Frontmatter notes:
+- `title` does not need quotes, even when it contains colons (`:`). The parser splits on the first `:` only.
+- Posts are ordered by `date` and, when present, `time` (most recent first).
 
-Para publicar un nuevo post, basta con crear el archivo `.md` en la carpeta correspondiente y hacer build. El sistema lo recoge automáticamente.
+To publish a new post, create the `.md` file in the appropriate folder and run a build. The system picks it up automatically.
 
-## Imágenes en posts
+## Images in Posts
 
-Los posts soportan imágenes en Markdown.
+Posts support Markdown images.
 
-### Convención recomendada
+### Recommended convention
 
-Guardar imágenes locales en:
+Store local images under:
 
 ```bash
 public/images/posts/
 ```
 
-Y referenciarlas así dentro del post:
+Reference them from within the post:
 
 ```md
-![Descripción](/images/posts/nombre-imagen.png)
+![Alt text](/images/posts/image-name.png)
 ```
 
-También se pueden usar imágenes remotas:
+Remote images are also supported:
 
 ```md
-![Captura](https://example.com/imagen.jpg)
+![Screenshot](https://example.com/image.jpg)
 ```
 
-### Nota práctica
+### Practical notes
 
-- Preferir imágenes locales para contenido propio del blog
-- Usar nombres de archivo simples, en minúsculas y con guiones
-- Si un post usa varias imágenes, puedes agruparlas con prefijos o subcarpetas dentro de `public/images/posts/`
+- Prefer local images for blog-owned content.
+- Use simple, lowercase, hyphenated filenames.
+- If a post uses multiple images, group them with prefixes or subdirectories inside `public/images/posts/`.
 
 ## Favicon
 
-El favicon es un SVG minimalista con una "V" estilizada que se adapta automáticamente al tema del sistema operativo usando `@media (prefers-color-scheme: dark)` embebido en el SVG:
+The favicon is a minimalist SVG with a stylized "V" that adapts automatically to the OS theme using `@media (prefers-color-scheme: dark)` embedded in the SVG:
 
-- **Light mode**: trazo `#222`
-- **Dark mode**: trazo `#ccc`
+- **Light mode**: `#222` stroke
+- **Dark mode**: `#ccc` stroke
 
-El `index.html` referencia `favicon.svg` como primario y `favicon.ico` como fallback.
+`index.html` references `favicon.svg` as primary and `favicon.ico` as fallback.
 
 ## Page Titles
 
-El título de cada página se establece con `document.title` via `useEffect` como mecanismo principal, ya que `react-helmet-async` no siempre sobreescribe el `<title>` estático del `index.html`. El Helmet se mantiene para los meta tags de SEO/OG.
+Each page sets `document.title` via `useEffect` as the primary mechanism, since `react-helmet-async` does not reliably override the static `<title>` in `index.html`. The Helmet tag is kept for SEO/OG meta tags.
 
-Formato: `{Título del post} — vmhq` en posts, `vmhq` en el index.
+Format: `{Post title} — vmhq` for posts, `vmhq` for the index.
 
 ## Vercel
 
-El proyecto está configurado para desplegar con **Bun** en Vercel:
+The project is configured to deploy with **Bun** on Vercel:
 
 - `installCommand`: `bun install`
 - `buildCommand`: `bun run build`
 - `outputDirectory`: `dist`
-- SPA rewrite a `index.html` para rutas del blog
+- SPA rewrite to `index.html` for blog routes
 
-Además, el proyecto incluye:
-- **Vercel Analytics** para tráfico y páginas vistas
-- **Vercel Speed Insights** para métricas reales de rendimiento
+The project also includes:
+- **Vercel Analytics** for traffic and page views
+- **Vercel Speed Insights** for real-user performance metrics
 
 ## Features
 
-- **Syntax highlighting** — bloques de código con colores por lenguaje (light/dark), usando `rehype-highlight` con tokens integrados en las CSS variables del blog
-- **Botón de copiar** — overlay al hacer hover sobre cualquier bloque de código, copia al portapapeles con feedback visual
-- **Navegación prev/next** — al final de cada post, enlaces al post anterior (más antiguo) y siguiente (más reciente)
+- **Syntax highlighting** — code blocks with per-language colors (light/dark), using `rehype-highlight` with tokens integrated into the blog's CSS variables
+- **Copy button** — overlay on hover over any code block, copies to clipboard with visual feedback
+- **Prev/next navigation** — at the end of each post, links to the previous (older) and next (newer) post
 
 ## Build-Time Generation
 
-El script `prebuild` corre antes de cada build y genera:
-- `public/rss.xml` — RSS 2.0 feed (a partir de los archivos `.md`)
+The `prebuild` script runs before every build and generates:
+- `public/rss.xml` — RSS 2.0 feed (from `.md` files)
 - `public/sitemap.xml` — XML sitemap
 
-El `SITE_URL` se resuelve dinámicamente desde las variables de entorno de Vercel (`VERCEL_PROJECT_PRODUCTION_URL` o `VERCEL_URL`), sin dominio hardcodeado. Fallback a `localhost:8080` para desarrollo local.
+`SITE_URL` is resolved dynamically from Vercel environment variables (`VERCEL_PROJECT_PRODUCTION_URL` or `VERCEL_URL`), with no hardcoded domain. Falls back to `localhost:8080` for local development.
 
-El RSS incluye un bloque `<image>` apuntando al favicon SVG del sitio.
+The RSS feed includes an `<image>` block pointing to the site's SVG favicon.
 
 ## License
 

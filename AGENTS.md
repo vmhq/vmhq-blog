@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-A minimal blog built with Bun + Vite 8 + React 19 + TypeScript + Tailwind CSS 4. Content is in Spanish, code in English.
+A minimal blog built with Bun + Vite 8 + React 19 + TypeScript + Tailwind CSS 4. Content is in Spanish, code in English. `README.md` must be written entirely in English — no Spanish mixed in.
 
 ## Build & Development Commands
 

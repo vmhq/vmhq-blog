@@ -10,7 +10,7 @@
 - **Tailwind CSS 4**
 - **Vitest 4**
 
-Content is written in **Spanish**. Code, config, and technical docs stay in **English**.
+Content is written in **Spanish**. Code, config, and technical docs stay in **English**. `README.md` must be written entirely in English — no Spanish mixed in.
 
 ## Working Rules
 
