@@ -66,7 +66,7 @@ const BlogLayout = ({ children }: BlogLayoutProps) => {
       </a>
 
       <header className="pt-10 pb-12 px-6">
-        <div className="max-w-prose mx-auto flex items-start justify-between gap-4">
+        <div className="max-w-3xl mx-auto flex items-start justify-between gap-4">
           <Link to="/" className="no-underline">
             <h1 className="site-title font-display text-2xl font-bold tracking-tight">
               vmhq
@@ -85,11 +85,11 @@ const BlogLayout = ({ children }: BlogLayoutProps) => {
       </header>
 
       <main id="main-content" className="flex-1 px-6">
-        <div className="max-w-prose mx-auto">{children}</div>
+        <div className="max-w-3xl mx-auto">{children}</div>
       </main>
 
       <footer className="py-12 px-6 mt-16">
-        <div className="max-w-prose mx-auto flex items-center gap-6 text-sm text-muted-foreground">
+        <div className="max-w-3xl mx-auto flex items-center gap-6 text-sm text-muted-foreground">
           <span>© vmhq {new Date().getFullYear()}</span>
           <Link to="/about" className="underline underline-offset-2 hover:text-foreground">
             Acerca
