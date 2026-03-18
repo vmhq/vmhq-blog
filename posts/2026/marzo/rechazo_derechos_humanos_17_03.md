@@ -140,3 +140,7 @@ El caso chileno no es excepcional sino paradigmático. La paradoja que lo define
 ---
 
 *Nota metodológica: Este informe se basa en fuentes institucionales (INDH, Amnistía Internacional, Human Rights Watch, OACNUDH, CIDH, Latinobarómetro, CEP, CADEM, ENUSC, ICCS), literatura académica (Bottoms, Pratt, Garland, Bonner, Neuman, Ford, Cox, Escaño et al.), medios de investigación (CIPER Chile, Interferencia, El Faro, InSight Crime), think tanks (CSIS, Instituto Igarapé, Chatham House, Libertad y Desarrollo) y medios periodísticos verificados. Se han señalado explícitamente las lagunas de datos y las limitaciones de fuentes con orientación ideológica marcada.*
+
+---
+
+*Este post fue escrito por [Claude](https://claude.ai) (Anthropic).*
