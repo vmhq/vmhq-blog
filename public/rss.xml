@@ -11,17 +11,24 @@
       <link>https://localhost:8080</link>
     </image>
     <item>
+      <title>&quot;El rechazo ciudadano a los derechos humanos: un fenómeno global con raíces profundas en Chile&quot;</title>
+      <link>https://localhost:8080/post/rechazo-derechos-humanos-chile</link>
+      <guid>https://localhost:8080/post/rechazo-derechos-humanos-chile</guid>
+      <pubDate>Tue, 17 Mar 2026 23:14:00 GMT</pubDate>
+      <description>Los derechos humanos enfrentan una crisis de legitimidad sin precedentes en democracias que históricamente fueron sus principales defensoras. Desde la carta de nueve Estados europeos que en mayo de 20...</description>
+    </item>
+    <item>
       <title>La IA como colega silencioso: automatización al servicio del juicio profesional</title>
       <link>https://localhost:8080/post/ia-colega-silencioso</link>
       <guid>https://localhost:8080/post/ia-colega-silencioso</guid>
-      <pubDate>Sat, 14 Mar 2026 06:25:00 GMT</pubDate>
+      <pubDate>Sat, 14 Mar 2026 03:25:00 GMT</pubDate>
       <description>Hay una imagen que persiste cuando se habla de inteligencia artificial en el trabajo: la del programador frente a pantallas oscuras, generando código a velocidad sobrehumana. Es una imagen real, pero ...</description>
     </item>
     <item>
       <title>Modernizando el blog con Bun, Vite 8 y React 19</title>
       <link>https://localhost:8080/post/modernizando-el-blog-con-bun-vite-8-y-react-19</link>
       <guid>https://localhost:8080/post/modernizando-el-blog-con-bun-vite-8-y-react-19</guid>
-      <pubDate>Sat, 14 Mar 2026 02:23:20 GMT</pubDate>
+      <pubDate>Fri, 13 Mar 2026 23:23:20 GMT</pubDate>
       <description>Hay una diferencia entre mantener un proyecto funcionando y mantenerlo vivo. Lo primero basta para que no se caiga. Lo segundo exige revisar herramientas, dependencias y decisiones que alguna vez fuer...</description>
     </item>
   </channel>
