@@ -14,8 +14,7 @@ Built with Bun, React 19, Vite 8, TypeScript, and Tailwind CSS 4.
 - **react-helmet-async** — per-page SEO meta tags
 - **react-markdown** + remark-gfm + rehype-highlight — Markdown rendering with syntax highlighting
 - **Vitest 4** — unit testing
-- **Vercel Analytics** — privacy-friendly page analytics
-- **Vercel Speed Insights** — real-user performance metrics
+- **Cloudflare Pages** — deployment and hosting
 
 ## Getting Started
 
@@ -129,18 +128,14 @@ Each page sets `document.title` via `useEffect` as the primary mechanism, since 
 
 Format: `{Post title} — vmhq` for posts, `vmhq` for the index.
 
-## Vercel
+## Cloudflare Pages
 
-The project is configured to deploy with **Bun** on Vercel:
+The project deploys to Cloudflare Pages:
 
-- `installCommand`: `bun install`
-- `buildCommand`: `bun run build`
-- `outputDirectory`: `dist`
-- SPA rewrite to `index.html` for blog routes
-
-The project also includes:
-- **Vercel Analytics** for traffic and page views
-- **Vercel Speed Insights** for real-user performance metrics
+- Build command: `bun run build`
+- Output directory: `dist`
+- SPA routing: `public/_redirects` (`/* /index.html 200`)
+- Set `SITE_URL` in the CF Pages dashboard to the production domain (e.g. `https://vmhq.blog`)
 
 ## Features
 
@@ -154,7 +149,7 @@ The `prebuild` script runs before every build and generates:
 - `public/rss.xml` — RSS 2.0 feed (from `.md` files)
 - `public/sitemap.xml` — XML sitemap
 
-`SITE_URL` is resolved dynamically from Vercel environment variables (`VERCEL_PROJECT_PRODUCTION_URL` or `VERCEL_URL`), with no hardcoded domain. Falls back to `localhost:8080` for local development.
+`SITE_URL` is resolved from `SITE_URL` (set in CF Pages dashboard) or `CF_PAGES_URL` (auto), with no hardcoded domain. Falls back to `localhost:8080` for local development.
 
 The RSS feed includes an `<image>` block pointing to the site's SVG favicon.
 
