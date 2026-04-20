@@ -135,7 +135,7 @@ The project deploys to Cloudflare Pages:
 - Output directory: `dist`
 - SPA routing handled by `public/_redirects` (`/* /index.html 200`)
 - Set `SITE_URL` as an environment variable in the CF Pages dashboard (e.g. `https://vmhq.blog`)
-- Set `VITE_CF_ANALYTICS_TOKEN` with the token from CF Web Analytics dashboard to enable analytics
+- Web Analytics se habilita desde el dashboard: Pages → Settings → Web Analytics (inyección automática, sin código)
 
 ## Before Finishing Work
 
