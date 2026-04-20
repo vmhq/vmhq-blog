@@ -133,7 +133,7 @@ The favicon is an adaptive SVG (`public/favicon.svg`) with `@media (prefers-colo
 The project deploys to Cloudflare Pages:
 - Build command: `bun run build`
 - Output directory: `dist`
-- SPA routing handled by `public/_redirects` (`/* /index.html 200`)
+- SPA routing configurado en `wrangler.jsonc` con `"not_found_handling": "single-page-application"`
 - Set `SITE_URL` as an environment variable in the CF Pages dashboard (e.g. `https://vmhq.blog`)
 - Web Analytics se habilita desde el dashboard: Pages → Settings → Web Analytics (inyección automática, sin código)
 
