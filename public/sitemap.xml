@@ -2,6 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://localhost:8080/</loc></url>
   <url><loc>https://localhost:8080/about</loc></url>
+  <url><loc>https://localhost:8080/post/rechazo-derechos-humanos-chile</loc><lastmod>2026-03-17T23:14:00</lastmod></url>
   <url><loc>https://localhost:8080/post/ia-colega-silencioso</loc><lastmod>2026-03-14T03:25:00</lastmod></url>
   <url><loc>https://localhost:8080/post/modernizando-el-blog-con-bun-vite-8-y-react-19</loc><lastmod>2026-03-13T23:23:20</lastmod></url>
 </urlset>

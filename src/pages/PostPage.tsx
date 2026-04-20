@@ -71,7 +71,7 @@ const PostPage = () => {
             {formatDate(post.date)}
           </time>
         </header>
-        <div className="prose">
+        <div className="prose prose-justified">
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
             rehypePlugins={[rehypeHighlight]}
