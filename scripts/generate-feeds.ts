@@ -69,18 +69,7 @@ function loadPosts(): Post[] {
     .sort((a, b) => getPostTimestamp(b) - getPostTimestamp(a));
 }
 
-// Resolve site URL from environment variables at build time.
-// SITE_URL should be set manually in the Cloudflare Pages dashboard to the
-// production domain (e.g. "https://vmhq.blog"). CF_PAGES_URL is the
-// per-deployment URL set automatically by Cloudflare Pages.
-// The fallback guarantees the script still works in local development.
-const SITE_URL = (() => {
-  const raw =
-    process.env.SITE_URL ??
-    process.env.CF_PAGES_URL ??
-    "http://localhost:8080";
-  return raw.startsWith("http") ? raw : `https://${raw}`;
-})();
+const SITE_URL = "https://me.vmhq.cl";
 
 console.log(`Using SITE_URL: ${SITE_URL}`);
 
