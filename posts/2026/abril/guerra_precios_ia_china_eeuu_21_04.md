@@ -76,3 +76,7 @@ En ese escenario, tanto China como Estados Unidos pueden salir fortalecidos en s
 La guerra de precios de la IA no es, en última instancia, una guerra que China haya declarado contra Estados Unidos. Es la manifestación de una tecnología que madura rápidamente, de costos que caen exponencialmente, y de una competencia global donde la eficiencia se convierte en ventaja competitiva. Que China haya apostado por modelos abiertos puede ser tanto estrategia deliberada como adaptación forzada. Lo que importa es el resultado: un mundo donde la IA avanzada deja de ser un privilegio de quienes pueden pagar miles de millones por clusters de entrenamiento, y se convierte en infraestructura técnica accesible, modificable y distribuida.
 
 Eso no significa que no haya riesgos. Significa que el riesgo principal no es que las empresas estadounidenses pierdan dinero — de momento, no lo están perdiendo — sino que el control sobre la tecnología que define las próximas décadas se fragmente entre dos bloques con visiones distintas de cómo debería funcionar.
+
+---
+
+*Este post fue escrito con [Kimi k2.6](https://www.kimi.com).*
