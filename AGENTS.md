@@ -104,7 +104,7 @@ The parser splits on the first `:` only.
 
 ### SITE_URL
 
-`scripts/generate-feeds.ts` resolves the site URL dynamically from Vercel env vars. **Never hardcode a domain.** Priority: `VERCEL_PROJECT_PRODUCTION_URL` > `VERCEL_URL` > `localhost:8080`.
+`scripts/generate-feeds.ts` uses a hardcoded `SITE_URL` value. Update it in the script if the domain changes.
 
 ### RSS Feed
 
@@ -211,6 +211,15 @@ Always use path aliases (configured in `tsconfig.json` and `vite.config.ts`):
 - `@/components/*` → `src/components/*`
 - `@/lib/*` → `src/lib/*`
 - `@/hooks/*` → `src/hooks/*`
+
+## Cloudflare Pages
+
+The project deploys to Cloudflare Pages:
+- Build command: `bun run build`
+- Output directory: `dist`
+- SPA routing configured in `wrangler.jsonc` with `"not_found_handling": "single-page-application"`
+- Set `SITE_URL` as an environment variable in the CF Pages dashboard (e.g. `https://vmhq.blog`)
+- Web Analytics is enabled from the dashboard: Pages → Settings → Web Analytics (automatic injection, no code)
 
 ## Before Finishing Work
 
