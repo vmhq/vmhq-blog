@@ -3,6 +3,7 @@ import { useParams, Navigate, Link } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
+import rehypeSanitize from "rehype-sanitize";
 import { Helmet } from "react-helmet-async";
 import BlogLayout from "@/components/BlogLayout";
 import { PreBlock } from "@/components/CodeBlock";
@@ -74,7 +75,7 @@ const PostPage = () => {
         <div className="prose prose-justified">
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
-            rehypePlugins={[rehypeHighlight]}
+            rehypePlugins={[rehypeHighlight, rehypeSanitize]}
             components={{
               pre: PreBlock,
               img: ({ src, alt }) => (
