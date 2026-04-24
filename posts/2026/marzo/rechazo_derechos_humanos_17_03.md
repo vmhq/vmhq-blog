@@ -1,5 +1,5 @@
 ---
-title: "El rechazo ciudadano a los derechos humanos: un fenómeno global con raíces profundas en Chile"
+title: El rechazo ciudadano a los derechos humanos: un fenómeno global con raíces profundas en Chile
 slug: rechazo-derechos-humanos-chile
 date: 2026-03-17
 time: 23:14:00

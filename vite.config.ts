@@ -12,7 +12,7 @@ export default defineConfig({
     },
   },
   build: {
-    sourcemap: false,
+    sourcemap: "hidden",
   },
   plugins: [react()],
   resolve: {

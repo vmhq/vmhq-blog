@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import * as React from "react";
+import { Link, useLocation } from "react-router-dom";
 import { getInitialTheme, applyTheme, getResolvedTheme, type Theme } from "@/lib/theme";
 
 interface BlogLayoutProps {
@@ -27,19 +27,19 @@ const SystemIcon = () => (
 );
 
 const BlogLayout = ({ children }: BlogLayoutProps) => {
-  const [theme, setTheme] = useState<Theme>(getInitialTheme);
+  const [theme, setTheme] = React.useState<Theme>(getInitialTheme);
   const resolvedTheme = getResolvedTheme(theme);
+  const location = useLocation();
 
-  useEffect(() => {
+  React.useEffect(() => {
     applyTheme(theme);
   }, [theme]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const mq = window.matchMedia("(prefers-color-scheme: dark)");
     const handler = () => {
       if (localStorage.getItem("theme") === "system") {
         applyTheme("system");
-        setTheme("system");
       }
     };
     mq.addEventListener("change", handler);
@@ -67,7 +67,7 @@ const BlogLayout = ({ children }: BlogLayoutProps) => {
 
       <header className="pt-10 pb-12 px-6">
         <div className="max-w-3xl mx-auto flex items-start justify-between gap-4">
-          <Link to="/" className="no-underline">
+          <Link to="/" className="no-underline" aria-current={location.pathname === "/" ? "page" : undefined}>
             <h1 className="site-title font-display text-2xl font-bold tracking-tight">
               vmhq
             </h1>
@@ -91,7 +91,7 @@ const BlogLayout = ({ children }: BlogLayoutProps) => {
       <footer className="py-12 px-6 mt-16">
         <div className="max-w-3xl mx-auto flex items-center gap-6 text-sm text-muted-foreground">
           <span>© vmhq {new Date().getFullYear()}</span>
-          <Link to="/about" className="underline underline-offset-2 hover:text-foreground">
+          <Link to="/about" className="underline underline-offset-2 hover:text-foreground" aria-current={location.pathname === "/about" ? "page" : undefined}>
             Acerca
           </Link>
           <a href="/rss.xml" type="application/rss+xml" className="underline underline-offset-2 hover:text-foreground">

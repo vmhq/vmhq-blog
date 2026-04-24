@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import * as React from "react";
 import { useParams, Navigate, Link } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -10,23 +10,32 @@ import { PreBlock } from "@/components/CodeBlock";
 import { getPostBySlug, getAdjacentPosts } from "@/lib/posts";
 import { formatDate } from "@/lib/formatters";
 
+const SITE_URL = import.meta.env.VITE_SITE_URL || "https://vmhq.blog";
+
+const markdownComponents = {
+  pre: PreBlock,
+  img: ({ src, alt }: React.ComponentPropsWithoutRef<"img">) => (
+    <img src={src} alt={alt ?? ""} loading="lazy" decoding="async" />
+  ),
+};
+
 const PostPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const post = slug ? getPostBySlug(slug) : undefined;
   const adjacent = slug ? getAdjacentPosts(slug) : { prev: null, next: null };
-  const [showBackToTop, setShowBackToTop] = useState(false);
+  const [showBackToTop, setShowBackToTop] = React.useState(false);
 
-  const pageTitle = post ? `${post.title} — vmhq` : "vmhq";
+  const pageTitle = post ? `${post.title} \u2014 vmhq` : "vmhq";
 
-  useEffect(() => {
+  React.useEffect(() => {
     window.scrollTo(0, 0);
   }, [slug]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     document.title = pageTitle;
   }, [pageTitle]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
@@ -41,17 +50,20 @@ const PostPage = () => {
 
   if (!post) return <Navigate to="/" replace />;
 
-  const description = post.content
-    .replace(/!\[.*?\]\(.*?\)/g, "")          // imágenes
-    .replace(/\[([^\]]+)\]\(.*?\)/g, "$1")    // links → solo texto
-    .replace(/`{1,3}[^`]*`{1,3}/g, "")        // código inline y bloques
-    .replace(/^#{1,6}\s+/gm, "")              // headings
-    .replace(/[*_~>|]/g, "")                  // énfasis, blockquotes, tablas
-    .replace(/&[a-z]+;/gi, " ")               // entidades HTML
-    .replace(/\s+/g, " ")
-    .trim()
-    .slice(0, 160);
-  const url = `${window.location.origin}/post/${post.slug}`;
+  const description = React.useMemo(() => {
+    return post.content
+      .replace(/!\[.*?\]\(.*?\)/g, "")          // imágenes
+      .replace(/\[([^\]]+)\]\(.*?\)/g, "$1")    // links → solo texto
+      .replace(/`{1,3}[^`]*`{1,3}/g, "")        // código inline y bloques
+      .replace(/^#{1,6}\s+/gm, "")              // headings
+      .replace(/[*_~>|]/g, "")                  // énfasis, blockquotes, tablas
+      .replace(/&[a-z]+;/gi, " ")               // entidades HTML
+      .replace(/\s+/g, " ")
+      .trim()
+      .slice(0, 160);
+  }, [post.content]);
+
+  const url = `${SITE_URL}/post/${post.slug}`;
 
   return (
     <BlogLayout>
@@ -62,6 +74,9 @@ const PostPage = () => {
         <meta property="og:description" content={description} />
         <meta property="og:url" content={url} />
         <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content={post.title} />
+        <meta name="twitter:description" content={description} />
       </Helmet>
       <article>
         <header className="mb-12">
@@ -75,13 +90,8 @@ const PostPage = () => {
         <div className="prose prose-justified">
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
-            rehypePlugins={[rehypeHighlight, rehypeSanitize]}
-            components={{
-              pre: PreBlock,
-              img: ({ src, alt }) => (
-                <img src={src} alt={alt ?? ""} loading="lazy" decoding="async" />
-              ),
-            }}
+            rehypePlugins={[rehypeSanitize, rehypeHighlight]}
+            components={markdownComponents}
           >
             {post.content}
           </ReactMarkdown>
@@ -129,6 +139,7 @@ const PostPage = () => {
           <path d="M12 19V5" />
           <path d="m5 12 7-7 7 7" />
         </svg>
+        <span className="sr-only" aria-live="polite">{showBackToTop ? "Visible" : "Oculto"}</span>
       </button>
     </BlogLayout>
   );

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import * as React from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import BlogLayout from "@/components/BlogLayout";
@@ -10,11 +10,11 @@ const POSTS_PER_PAGE = 10;
 const Index = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = Math.max(1, Number(searchParams.get("page")) || 1);
-  const posts = getAllPosts();
+  const posts = React.useMemo(() => getAllPosts(), []);
   const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE);
   const paginated = posts.slice((currentPage - 1) * POSTS_PER_PAGE, currentPage * POSTS_PER_PAGE);
 
-  useEffect(() => {
+  React.useEffect(() => {
     document.title = "vmhq";
   }, []);
 
@@ -27,7 +27,7 @@ const Index = () => {
     <BlogLayout>
       <Helmet>
         <title>vmhq</title>
-        <meta name="description" content="Blog personal minimalista. Reflexiones sobre diseño, tecnología y escritura." />
+        <meta name="description" content="Reflexiones sobre inteligencia artificial, derechos humanos, tecnología y política. Un espacio para pensar en voz alta." />
       </Helmet>
       <div className="space-y-8">
         {paginated.length === 0 && (

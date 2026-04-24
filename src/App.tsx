@@ -1,17 +1,21 @@
+import * as React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Index from "./pages/Index.tsx";
-import PostPage from "./pages/PostPage.tsx";
-import About from "./pages/About.tsx";
-import NotFound from "./pages/NotFound.tsx";
+
+const Index = React.lazy(() => import("./pages/Index.tsx"));
+const PostPage = React.lazy(() => import("./pages/PostPage.tsx"));
+const About = React.lazy(() => import("./pages/About.tsx"));
+const NotFound = React.lazy(() => import("./pages/NotFound.tsx"));
 
 const App = () => (
   <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<Index />} />
-      <Route path="/post/:slug" element={<PostPage />} />
-      <Route path="/about" element={<About />} />
-      <Route path="*" element={<NotFound />} />
-    </Routes>
+    <React.Suspense fallback={null}>
+      <Routes>
+        <Route path="/" element={<Index />} />
+        <Route path="/post/:slug" element={<PostPage />} />
+        <Route path="/about" element={<About />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </React.Suspense>
   </BrowserRouter>
 );
 

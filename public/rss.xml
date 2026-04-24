@@ -1,47 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>vmhq</title>
-    <link>https://me.vmhq.cl</link>
+    <link>https://vmhq.blog</link>
     <description>Un espacio para pensar en voz alta.</description>
     <language>es</language>
+    <lastBuildDate>Fri, 24 Apr 2026 00:09:34 GMT</lastBuildDate>
+    <atom:link href="https://vmhq.blog/rss.xml" rel="self" type="application/rss+xml" />
     <image>
-      <url>https://me.vmhq.cl/favicon.svg</url>
+      <url>https://vmhq.blog/favicon.svg</url>
       <title>vmhq</title>
-      <link>https://me.vmhq.cl</link>
+      <link>https://vmhq.blog</link>
     </image>
     <item>
       <title>La guerra de precios de la IA: competencia natural o estrategia deliberada</title>
-      <link>https://me.vmhq.cl/post/guerra-precios-ia-china-eeuu</link>
-      <guid>https://me.vmhq.cl/post/guerra-precios-ia-china-eeuu</guid>
+      <link>https://vmhq.blog/post/guerra-precios-ia-china-eeuu</link>
+      <guid isPermaLink="true">https://vmhq.blog/post/guerra-precios-ia-china-eeuu</guid>
       <pubDate>Wed, 22 Apr 2026 02:35:00 GMT</pubDate>
       <description>En enero de 2025, DeepSeek lanzó su modelo R1. No fue el anuncio más ruidoso del año, pero fue el más perturbador. Porque R1 no solo igualaba el rendimiento de modelos estadounidenses como el o1 de Op...</description>
     </item>
     <item>
       <title>IA, derechos humanos y trabajo: quién protege al trabajador cuando el jefe es un algoritmo</title>
-      <link>https://me.vmhq.cl/post/ia-ddhh-proteccion-laboral</link>
-      <guid>https://me.vmhq.cl/post/ia-ddhh-proteccion-laboral</guid>
+      <link>https://vmhq.blog/post/ia-ddhh-proteccion-laboral</link>
+      <guid isPermaLink="true">https://vmhq.blog/post/ia-ddhh-proteccion-laboral</guid>
       <pubDate>Mon, 20 Apr 2026 16:00:00 GMT</pubDate>
       <description>En 2023, un conductor de reparto en el Reino Unido fue desactivado de la plataforma sin aviso, sin explicación, sin posibilidad de apelación. El sistema decidió que era un riesgo. No hubo gerente que ...</description>
     </item>
     <item>
-      <title>&quot;El rechazo ciudadano a los derechos humanos: un fenómeno global con raíces profundas en Chile&quot;</title>
-      <link>https://me.vmhq.cl/post/rechazo-derechos-humanos-chile</link>
-      <guid>https://me.vmhq.cl/post/rechazo-derechos-humanos-chile</guid>
+      <title>El rechazo ciudadano a los derechos humanos: un fenómeno global con raíces profundas en Chile</title>
+      <link>https://vmhq.blog/post/rechazo-derechos-humanos-chile</link>
+      <guid isPermaLink="true">https://vmhq.blog/post/rechazo-derechos-humanos-chile</guid>
       <pubDate>Wed, 18 Mar 2026 02:14:00 GMT</pubDate>
       <description>Los derechos humanos enfrentan una crisis de legitimidad sin precedentes en democracias que históricamente fueron sus principales defensoras. Desde la carta de nueve Estados europeos que en mayo de 20...</description>
     </item>
     <item>
       <title>La IA como colega silencioso: automatización al servicio del juicio profesional</title>
-      <link>https://me.vmhq.cl/post/ia-colega-silencioso</link>
-      <guid>https://me.vmhq.cl/post/ia-colega-silencioso</guid>
+      <link>https://vmhq.blog/post/ia-colega-silencioso</link>
+      <guid isPermaLink="true">https://vmhq.blog/post/ia-colega-silencioso</guid>
       <pubDate>Sat, 14 Mar 2026 06:25:00 GMT</pubDate>
       <description>Hay una imagen que persiste cuando se habla de inteligencia artificial en el trabajo: la del programador frente a pantallas oscuras, generando código a velocidad sobrehumana. Es una imagen real, pero ...</description>
     </item>
     <item>
       <title>Modernizando el blog con Bun, Vite 8 y React 19</title>
-      <link>https://me.vmhq.cl/post/modernizando-el-blog-con-bun-vite-8-y-react-19</link>
-      <guid>https://me.vmhq.cl/post/modernizando-el-blog-con-bun-vite-8-y-react-19</guid>
+      <link>https://vmhq.blog/post/modernizando-el-blog-con-bun-vite-8-y-react-19</link>
+      <guid isPermaLink="true">https://vmhq.blog/post/modernizando-el-blog-con-bun-vite-8-y-react-19</guid>
       <pubDate>Sat, 14 Mar 2026 02:23:20 GMT</pubDate>
       <description>Hay una diferencia entre mantener un proyecto funcionando y mantenerlo vivo. Lo primero basta para que no se caiga. Lo segundo exige revisar herramientas, dependencias y decisiones que alguna vez fuer...</description>
     </item>
