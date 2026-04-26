@@ -5,13 +5,23 @@
     <link>https://vmhq.blog</link>
     <description>Un espacio para pensar en voz alta.</description>
     <language>es</language>
-    <lastBuildDate>Sun, 26 Apr 2026 16:47:57 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 26 Apr 2026 23:41:49 GMT</lastBuildDate>
     <atom:link href="https://vmhq.blog/rss.xml" rel="self" type="application/rss+xml" />
     <image>
       <url>https://vmhq.blog/favicon.svg</url>
       <title>vmhq</title>
       <link>https://vmhq.blog</link>
     </image>
+    <item>
+      <title>Avances Clave en Inteligencia Artificial hacia la AGI: Análisis del Panorama en Abril 2026</title>
+      <link>https://vmhq.blog/post/panorama-agi-abril-2026</link>
+      <guid isPermaLink="true">https://vmhq.blog/post/panorama-agi-abril-2026</guid>
+      <pubDate>Mon, 27 Apr 2026 00:00:00 GMT</pubDate>
+      <description># Avances Clave en Inteligencia Artificial hacia la AGI: Análisis del Panorama en Abril 2026
+## Executive Summary
+
+El segundo trimestre de 2026 marca un punto de inflexión en la trayectoria de la inte...</description>
+    </item>
     <item>
       <title>Por qué autoalojar tus servicios: control, privacidad y aprendizaje real</title>
       <link>https://vmhq.blog/post/ventajas-autoalojar-servicios</link>
