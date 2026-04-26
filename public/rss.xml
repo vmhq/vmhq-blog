@@ -5,13 +5,20 @@
     <link>https://vmhq.blog</link>
     <description>Un espacio para pensar en voz alta.</description>
     <language>es</language>
-    <lastBuildDate>Fri, 24 Apr 2026 00:09:34 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 26 Apr 2026 16:47:57 GMT</lastBuildDate>
     <atom:link href="https://vmhq.blog/rss.xml" rel="self" type="application/rss+xml" />
     <image>
       <url>https://vmhq.blog/favicon.svg</url>
       <title>vmhq</title>
       <link>https://vmhq.blog</link>
     </image>
+    <item>
+      <title>Por qué autoalojar tus servicios: control, privacidad y aprendizaje real</title>
+      <link>https://vmhq.blog/post/ventajas-autoalojar-servicios</link>
+      <guid isPermaLink="true">https://vmhq.blog/post/ventajas-autoalojar-servicios</guid>
+      <pubDate>Sun, 26 Apr 2026 20:30:00 GMT</pubDate>
+      <description>Durante años asumimos que la nube pública es la opción por defecto. Gmail para el correo, Notion para las notas, GitHub para el código, Figma para el diseño. Funcionan bien, son convenientes, y la may...</description>
+    </item>
     <item>
       <title>La guerra de precios de la IA: competencia natural o estrategia deliberada</title>
       <link>https://vmhq.blog/post/guerra-precios-ia-china-eeuu</link>
