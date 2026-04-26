@@ -48,9 +48,8 @@ const PostPage = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  if (!post) return <Navigate to="/" replace />;
-
   const description = React.useMemo(() => {
+    if (!post) return "";
     return post.content
       .replace(/!\[.*?\]\(.*?\)/g, "")          // imágenes
       .replace(/\[([^\]]+)\]\(.*?\)/g, "$1")    // links → solo texto
@@ -61,7 +60,10 @@ const PostPage = () => {
       .replace(/\s+/g, " ")
       .trim()
       .slice(0, 160);
-  }, [post.content]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [post?.content]);
+
+  if (!post) return <Navigate to="/" replace />;
 
   const url = `${SITE_URL}/post/${post.slug}`;
 
