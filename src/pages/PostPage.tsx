@@ -17,6 +17,11 @@ const markdownComponents = {
   img: ({ src, alt }: React.ComponentPropsWithoutRef<"img">) => (
     <img src={src} alt={alt ?? ""} loading="lazy" decoding="async" />
   ),
+  table: ({ children }: React.ComponentPropsWithoutRef<"table">) => (
+    <div className="overflow-x-auto my-6">
+      <table>{children}</table>
+    </div>
+  ),
 };
 
 const PostPage = () => {

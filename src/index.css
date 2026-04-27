@@ -187,6 +187,40 @@
   margin: 1.5em 0;
 }
 
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9em;
+  margin: 1.5em 0;
+  border: 1px solid hsl(var(--border));
+}
+
+.prose thead {
+  background: hsl(var(--muted));
+}
+
+.prose th {
+  font-weight: 600;
+  text-align: left;
+  padding: 0.75em 1em;
+  border-bottom: 2px solid hsl(var(--border));
+  color: hsl(var(--foreground));
+}
+
+.prose td {
+  padding: 0.625em 1em;
+  border-bottom: 1px solid hsl(var(--border));
+  vertical-align: top;
+}
+
+.prose tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.prose tbody tr:nth-child(even) {
+  background: hsl(var(--muted) / 0.35);
+}
+
 .prose-justified p,
 .prose-justified li {
   text-align: justify;
