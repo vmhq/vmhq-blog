@@ -316,5 +316,3 @@ Cuatro empresas — OpenAI, Anthropic, xAI y Waymo — concentraron $188 mil mil
 ---
 
 *Este análisis fue generado con [Kimi K2.6 Agent Swarm](https://kimi.com).*
-
----
