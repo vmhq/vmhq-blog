@@ -65,8 +65,7 @@ const PostPage = () => {
       .replace(/\s+/g, " ")
       .trim()
       .slice(0, 160);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [post?.content]);
+  }, [post]);
 
   if (!post) return <Navigate to="/" replace />;
 
@@ -81,9 +80,45 @@ const PostPage = () => {
         <meta property="og:description" content={description} />
         <meta property="og:url" content={url} />
         <meta property="og:type" content="article" />
+        <meta property="og:image" content={`${SITE_URL}/favicon.svg`} />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:title" content={post.title} />
         <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={`${SITE_URL}/favicon.svg`} />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": post.title,
+            "description": description,
+            "url": url,
+            "datePublished": post.date,
+            "dateModified": post.time ? `${post.date}T${post.time}` : post.date,
+            "author": {
+              "@type": "Person",
+              "name": "Vicente Méndez",
+              "url": `${SITE_URL}/about`
+            },
+            "publisher": {
+              "@type": "Organization",
+              "name": "vmhq",
+              "logo": {
+                "@type": "ImageObject",
+                "url": `${SITE_URL}/favicon.svg`
+              }
+            }
+          })}
+        </script>
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "vmhq", "item": SITE_URL },
+              { "@type": "ListItem", "position": 2, "name": post.title, "item": url }
+            ]
+          })}
+        </script>
       </Helmet>
       <article>
         <header className="mb-12">
@@ -140,13 +175,12 @@ const PostPage = () => {
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         aria-label="Volver arriba"
         title="Volver arriba"
-        className={`fixed bottom-6 right-6 z-40 inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background text-muted-foreground shadow-sm transition-all hover:text-foreground hover:border-foreground/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2 will-change-transform ${showBackToTop ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-2 opacity-0"}`}
+        className={`fixed bottom-6 right-6 z-40 inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background text-muted-foreground shadow-sm transition-all hover:text-foreground hover:border-foreground/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2 will-change-[transform] ${showBackToTop ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-2 opacity-0"}`}
       >
         <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
           <path d="M12 19V5" />
           <path d="m5 12 7-7 7 7" />
         </svg>
-        <span className="sr-only" aria-live="polite">{showBackToTop ? "Visible" : "Oculto"}</span>
       </button>
     </BlogLayout>
   );

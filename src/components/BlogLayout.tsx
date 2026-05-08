@@ -97,7 +97,7 @@ const BlogLayout = ({ children }: BlogLayoutProps) => {
           <a href="/rss.xml" type="application/rss+xml" className="underline underline-offset-2 hover:text-foreground">
             RSS
           </a>
-          <a href="https://github.com/vmhq" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-foreground">
+          <a href="https://github.com/vmhq" target="_blank" rel="noopener noreferrer" aria-label="GitHub (se abre en nueva pestaña)" className="underline underline-offset-2 hover:text-foreground">
             GitHub
           </a>
         </div>

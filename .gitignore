@@ -12,6 +12,14 @@ dist
 dist-ssr
 *.local
 
+# AI tooling (skills and local configs)
+.agents/
+.claude/
+.codebuddy/
+.continue/
+.junie/
+.kiro/
+
 # Environment and secrets
 .env
 .env.*

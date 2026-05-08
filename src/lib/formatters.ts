@@ -1,7 +1,12 @@
+const dateFormatter = new Intl.DateTimeFormat("es-ES", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+
 export function formatDate(dateStr: string): string {
   const normalized = dateStr.includes("T") ? dateStr : `${dateStr}T00:00:00`;
-  const d = new Date(normalized);
-  return d.toLocaleDateString("es-ES", { year: "numeric", month: "long", day: "numeric" });
+  return dateFormatter.format(new Date(normalized));
 }
 
 export function readingTime(content: string): string {

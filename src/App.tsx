@@ -1,10 +1,10 @@
 import * as React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-const Index = React.lazy(() => import("./pages/Index.tsx"));
-const PostPage = React.lazy(() => import("./pages/PostPage.tsx"));
-const About = React.lazy(() => import("./pages/About.tsx"));
-const NotFound = React.lazy(() => import("./pages/NotFound.tsx"));
+const Index = React.lazy(() => import("./pages/Index"));
+const PostPage = React.lazy(() => import("./pages/PostPage"));
+const About = React.lazy(() => import("./pages/About"));
+const NotFound = React.lazy(() => import("./pages/NotFound"));
 
 const App = () => (
   <BrowserRouter>
