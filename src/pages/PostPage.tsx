@@ -1,56 +1,78 @@
-import { useEffect, useState } from "react";
+import * as React from "react";
 import { useParams, Navigate, Link } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
+import rehypeSanitize from "rehype-sanitize";
 import { Helmet } from "react-helmet-async";
 import BlogLayout from "@/components/BlogLayout";
 import { PreBlock } from "@/components/CodeBlock";
 import { getPostBySlug, getAdjacentPosts } from "@/lib/posts";
 import { formatDate } from "@/lib/formatters";
 
+const SITE_URL = import.meta.env.VITE_SITE_URL || "https://vmhq.blog";
+
+const markdownComponents = {
+  pre: PreBlock,
+  img: ({ src, alt }: React.ComponentPropsWithoutRef<"img">) => (
+    <img src={src} alt={alt ?? ""} loading="lazy" decoding="async" />
+  ),
+  table: ({ children }: React.ComponentPropsWithoutRef<"table">) => (
+    <div className="overflow-x-auto my-6">
+      <table>{children}</table>
+    </div>
+  ),
+};
+
 const PostPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const post = slug ? getPostBySlug(slug) : undefined;
   const adjacent = slug ? getAdjacentPosts(slug) : { prev: null, next: null };
-  const [showBackToTop, setShowBackToTop] = useState(false);
+  const [showBackToTop, setShowBackToTop] = React.useState(false);
+  const showBackToTopRef = React.useRef(false);
 
-  const pageTitle = post ? `${post.title} — vmhq` : "vmhq";
+  const pageTitle = post ? `${post.title} \u2014 vmhq` : "vmhq";
 
-  useEffect(() => {
+  React.useEffect(() => {
     window.scrollTo(0, 0);
   }, [slug]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     document.title = pageTitle;
   }, [pageTitle]);
 
-  useEffect(() => {
-    const handleScroll = () => {
+  React.useEffect(() => {
+    let frameId = 0;
+
+    const updateBackToTop = () => {
+      frameId = 0;
       const scrollTop = window.scrollY;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const nearEnd = docHeight > 0 && scrollTop / docHeight > 0.45;
-      setShowBackToTop(nearEnd);
+      const nextShowBackToTop = docHeight > 0 && scrollTop / docHeight > 0.45;
+
+      if (showBackToTopRef.current !== nextShowBackToTop) {
+        showBackToTopRef.current = nextShowBackToTop;
+        setShowBackToTop(nextShowBackToTop);
+      }
     };
 
-    handleScroll();
+    const handleScroll = () => {
+      if (frameId) return;
+      frameId = window.requestAnimationFrame(updateBackToTop);
+    };
+
+    updateBackToTop();
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (frameId) window.cancelAnimationFrame(frameId);
+    };
   }, []);
 
   if (!post) return <Navigate to="/" replace />;
 
-  const description = post.content
-    .replace(/!\[.*?\]\(.*?\)/g, "")          // imágenes
-    .replace(/\[([^\]]+)\]\(.*?\)/g, "$1")    // links → solo texto
-    .replace(/`{1,3}[^`]*`{1,3}/g, "")        // código inline y bloques
-    .replace(/^#{1,6}\s+/gm, "")              // headings
-    .replace(/[*_~>|]/g, "")                  // énfasis, blockquotes, tablas
-    .replace(/&[a-z]+;/gi, " ")               // entidades HTML
-    .replace(/\s+/g, " ")
-    .trim()
-    .slice(0, 160);
-  const url = `${window.location.origin}/post/${post.slug}`;
+  const url = `${SITE_URL}/post/${post.slug}`;
+  const description = post.description;
 
   return (
     <BlogLayout>
@@ -61,6 +83,45 @@ const PostPage = () => {
         <meta property="og:description" content={description} />
         <meta property="og:url" content={url} />
         <meta property="og:type" content="article" />
+        <meta property="og:image" content={`${SITE_URL}/favicon.svg`} />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content={post.title} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={`${SITE_URL}/favicon.svg`} />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": post.title,
+            "description": description,
+            "url": url,
+            "datePublished": post.date,
+            "dateModified": post.lastModified,
+            "author": {
+              "@type": "Person",
+              "name": "Vicente Méndez",
+              "url": `${SITE_URL}/about`
+            },
+            "publisher": {
+              "@type": "Organization",
+              "name": "vmhq",
+              "logo": {
+                "@type": "ImageObject",
+                "url": `${SITE_URL}/favicon.svg`
+              }
+            }
+          })}
+        </script>
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "vmhq", "item": SITE_URL },
+              { "@type": "ListItem", "position": 2, "name": post.title, "item": url }
+            ]
+          })}
+        </script>
       </Helmet>
       <article>
         <header className="mb-12">
@@ -74,13 +135,8 @@ const PostPage = () => {
         <div className="prose prose-justified">
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
-            rehypePlugins={[rehypeHighlight]}
-            components={{
-              pre: PreBlock,
-              img: ({ src, alt }) => (
-                <img src={src} alt={alt ?? ""} loading="lazy" decoding="async" />
-              ),
-            }}
+            rehypePlugins={[rehypeSanitize, rehypeHighlight]}
+            components={markdownComponents}
           >
             {post.content}
           </ReactMarkdown>
@@ -122,7 +178,7 @@ const PostPage = () => {
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         aria-label="Volver arriba"
         title="Volver arriba"
-        className={`fixed bottom-6 right-6 z-40 inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background text-muted-foreground shadow-sm transition-all hover:text-foreground hover:border-foreground/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2 will-change-transform ${showBackToTop ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-2 opacity-0"}`}
+        className={`fixed bottom-6 right-6 z-40 inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background text-muted-foreground shadow-sm transition-all hover:text-foreground hover:border-foreground/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2 will-change-[transform] ${showBackToTop ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-2 opacity-0"}`}
       >
         <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
           <path d="M12 19V5" />

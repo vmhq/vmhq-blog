@@ -2,18 +2,19 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 
-import { cloudflare } from "@cloudflare/vite-plugin";
-
 // https://vitejs.dev/config/
 export default defineConfig({
   server: {
-    host: "::",
+    host: "127.0.0.1",
     port: 8080,
     hmr: {
       overlay: false,
     },
   },
-  plugins: [react(), cloudflare()],
+  build: {
+    sourcemap: "hidden",
+  },
+  plugins: [react()],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

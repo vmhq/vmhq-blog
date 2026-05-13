@@ -1,9 +1,9 @@
-import { useEffect } from "react";
+import * as React from "react";
 import { Helmet } from "react-helmet-async";
 import BlogLayout from "@/components/BlogLayout";
 
 const About = () => {
-  useEffect(() => {
+  React.useEffect(() => {
     document.title = "Acerca \u2014 vmhq";
   }, []);
 

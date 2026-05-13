@@ -1,29 +1,8 @@
 import { writeFileSync, mkdirSync, readdirSync, readFileSync } from "fs";
 import { join, resolve } from "path";
-
-interface Post {
-  slug: string;
-  title: string;
-  date: string;
-  time?: string;
-  content: string;
-}
-
-function parseFrontmatter(raw: string): { data: Record<string, string>; body: string } {
-  if (!raw.startsWith("---")) return { data: {}, body: raw };
-  const end = raw.indexOf("---", 3);
-  if (end === -1) return { data: {}, body: raw };
-  const frontmatter = raw.slice(3, end).trim();
-  const body = raw.slice(end + 3).trim();
-  const data: Record<string, string> = {};
-  for (const line of frontmatter.split("\n")) {
-    const colonIdx = line.indexOf(":");
-    if (colonIdx > 0) {
-      data[line.slice(0, colonIdx).trim()] = line.slice(colonIdx + 1).trim();
-    }
-  }
-  return { data, body };
-}
+import { parseFrontmatter, type Post } from "../src/lib/parse-post";
+import { summarizeMarkdown } from "../src/lib/formatters";
+import { createPost, isValidPost, sortPostsByNewest } from "../src/lib/post-model";
 
 function collectMarkdownFiles(dir: string): string[] {
   const files: string[] = [];
@@ -38,50 +17,23 @@ function collectMarkdownFiles(dir: string): string[] {
   return files;
 }
 
-function getPostTimestamp(post: Pick<Post, "date" | "time">): number {
-  if (!post.date) return 0;
-  const normalized = post.date.includes("T")
-    ? post.date
-    : post.time
-      ? `${post.date}T${post.time}`
-      : `${post.date}T00:00:00`;
-  const ts = new Date(normalized).getTime();
-  return Number.isNaN(ts) ? 0 : ts;
-}
-
-function getPostLastMod(post: Pick<Post, "date" | "time">): string {
-  return post.time ? `${post.date}T${post.time}` : post.date;
-}
-
 function loadPosts(): Post[] {
   const postsDir = resolve(process.cwd(), "posts");
-  return collectMarkdownFiles(postsDir)
+  return sortPostsByNewest(collectMarkdownFiles(postsDir)
     .map((file) => {
       const { data, body } = parseFrontmatter(readFileSync(file, "utf-8"));
-      return {
-        slug: data.slug ?? "",
-        title: data.title ?? "",
-        date: data.date ?? "",
-        time: data.time ?? undefined,
-        content: body,
-      };
+      return createPost(data, body);
     })
-    .sort((a, b) => getPostTimestamp(b) - getPostTimestamp(a));
+    .filter((post) => {
+      if (!isValidPost(post)) {
+        console.warn(`Skipping post with missing required fields: slug="${post.slug}" title="${post.title}" date="${post.date}"`);
+        return false;
+      }
+      return true;
+    }));
 }
 
-// Resolve site URL from Vercel environment variables at build time.
-// VERCEL_PROJECT_PRODUCTION_URL is the primary production domain assigned to
-// the project (e.g. "vmhq-blog.vercel.app" or a custom domain like "vmhq.blog").
-// VERCEL_URL is the unique deployment URL for preview/branch deploys.
-// The fallback guarantees the script still works in local development.
-const SITE_URL = (() => {
-  const raw =
-    process.env.VERCEL_PROJECT_PRODUCTION_URL ??
-    process.env.VERCEL_URL ??
-    "localhost:8080";
-  // Vercel env vars don't include the protocol
-  return raw.startsWith("http") ? raw : `https://${raw}`;
-})();
+const SITE_URL = process.env.SITE_URL || "https://vmhq.blog";
 
 console.log(`Using SITE_URL: ${SITE_URL}`);
 
@@ -90,29 +42,35 @@ function escapeXml(str: string): string {
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
 }
 
 function generateRSS(posts: Post[]): string {
   const items = posts
-    .map(
-      (post) => `    <item>
+    .map((post) => {
+      const pubDate = new Date(post.lastModified).toUTCString();
+      return `    <item>
       <title>${escapeXml(post.title)}</title>
-      <link>${SITE_URL}/post/${post.slug}</link>
-      <guid>${SITE_URL}/post/${post.slug}</guid>
-      <pubDate>${new Date(getPostLastMod(post)).toUTCString()}</pubDate>
-      <description>${escapeXml(post.content.slice(0, 200))}...</description>
-    </item>`
-    )
+      <link>${SITE_URL}/post/${encodeURIComponent(post.slug)}</link>
+      <guid isPermaLink="true">${SITE_URL}/post/${encodeURIComponent(post.slug)}</guid>
+      <pubDate>${pubDate === "Invalid Date" ? post.lastModified : pubDate}</pubDate>
+      <description>${escapeXml(summarizeMarkdown(post.content, 200))}</description>
+    </item>`;
+    })
     .join("\n");
 
+  const lastBuildDate = new Date().toUTCString();
+
   return `<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>vmhq</title>
     <link>${SITE_URL}</link>
     <description>Un espacio para pensar en voz alta.</description>
     <language>es</language>
+    <lastBuildDate>${lastBuildDate}</lastBuildDate>
+    <atom:link href="${SITE_URL}/rss.xml" rel="self" type="application/rss+xml" />
     <image>
       <url>${SITE_URL}/favicon.svg</url>
       <title>vmhq</title>
@@ -124,12 +82,13 @@ ${items}
 }
 
 function generateSitemap(posts: Post[]): string {
+  const now = new Date().toISOString().slice(0, 10);
   const urls = [
-    `  <url><loc>${SITE_URL}/</loc></url>`,
-    `  <url><loc>${SITE_URL}/about</loc></url>`,
+    `  <url><loc>${SITE_URL}/</loc><lastmod>${now}</lastmod></url>`,
+    `  <url><loc>${SITE_URL}/about</loc><lastmod>${now}</lastmod></url>`,
     ...posts.map(
       (post) =>
-        `  <url><loc>${SITE_URL}/post/${post.slug}</loc><lastmod>${getPostLastMod(post)}</lastmod></url>`
+        `  <url><loc>${SITE_URL}/post/${encodeURIComponent(post.slug)}</loc><lastmod>${post.lastModified}</lastmod></url>`
     ),
   ].join("\n");
 

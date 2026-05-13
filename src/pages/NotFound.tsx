@@ -1,10 +1,10 @@
-import { useEffect } from "react";
+import * as React from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import BlogLayout from "@/components/BlogLayout";
 
 const NotFound = () => {
-  useEffect(() => {
+  React.useEffect(() => {
     document.title = "P\u00e1gina no encontrada \u2014 vmhq";
   }, []);
 
@@ -12,6 +12,7 @@ const NotFound = () => {
     <BlogLayout>
       <Helmet>
         <title>Página no encontrada — vmhq</title>
+        <meta name="robots" content="noindex" />
       </Helmet>
       <div className="py-16 text-center">
         <p className="text-sm text-muted-foreground uppercase tracking-wide mb-4">404</p>
