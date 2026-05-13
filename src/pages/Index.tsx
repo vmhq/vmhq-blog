@@ -3,7 +3,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import BlogLayout from "@/components/BlogLayout";
 import { getAllPosts } from "@/lib/posts";
-import { formatDate, readingTime } from "@/lib/formatters";
+import { formatDate } from "@/lib/formatters";
 
 const POSTS_PER_PAGE = 10;
 
@@ -42,7 +42,7 @@ const Index = () => {
               <div className="flex items-center gap-3 text-sm text-muted-foreground mt-1">
                 <time dateTime={post.date}>{formatDate(post.date)}</time>
                 <span>·</span>
-                <span>{readingTime(post.content)}</span>
+                <span>{post.readingTime}</span>
               </div>
             </Link>
           </article>

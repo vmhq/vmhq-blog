@@ -29,6 +29,7 @@ const PostPage = () => {
   const post = slug ? getPostBySlug(slug) : undefined;
   const adjacent = slug ? getAdjacentPosts(slug) : { prev: null, next: null };
   const [showBackToTop, setShowBackToTop] = React.useState(false);
+  const showBackToTopRef = React.useRef(false);
 
   const pageTitle = post ? `${post.title} \u2014 vmhq` : "vmhq";
 
@@ -41,35 +42,37 @@ const PostPage = () => {
   }, [pageTitle]);
 
   React.useEffect(() => {
-    const handleScroll = () => {
+    let frameId = 0;
+
+    const updateBackToTop = () => {
+      frameId = 0;
       const scrollTop = window.scrollY;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const nearEnd = docHeight > 0 && scrollTop / docHeight > 0.45;
-      setShowBackToTop(nearEnd);
+      const nextShowBackToTop = docHeight > 0 && scrollTop / docHeight > 0.45;
+
+      if (showBackToTopRef.current !== nextShowBackToTop) {
+        showBackToTopRef.current = nextShowBackToTop;
+        setShowBackToTop(nextShowBackToTop);
+      }
     };
 
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    const handleScroll = () => {
+      if (frameId) return;
+      frameId = window.requestAnimationFrame(updateBackToTop);
+    };
 
-  const description = React.useMemo(() => {
-    if (!post) return "";
-    return post.content
-      .replace(/!\[.*?\]\(.*?\)/g, "")          // imágenes
-      .replace(/\[([^\]]+)\]\(.*?\)/g, "$1")    // links → solo texto
-      .replace(/`{1,3}[^`]*`{1,3}/g, "")        // código inline y bloques
-      .replace(/^#{1,6}\s+/gm, "")              // headings
-      .replace(/[*_~>|]/g, "")                  // énfasis, blockquotes, tablas
-      .replace(/&[a-z]+;/gi, " ")               // entidades HTML
-      .replace(/\s+/g, " ")
-      .trim()
-      .slice(0, 160);
-  }, [post]);
+    updateBackToTop();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (frameId) window.cancelAnimationFrame(frameId);
+    };
+  }, []);
 
   if (!post) return <Navigate to="/" replace />;
 
   const url = `${SITE_URL}/post/${post.slug}`;
+  const description = post.description;
 
   return (
     <BlogLayout>
@@ -93,7 +96,7 @@ const PostPage = () => {
             "description": description,
             "url": url,
             "datePublished": post.date,
-            "dateModified": post.time ? `${post.date}T${post.time}` : post.date,
+            "dateModified": post.lastModified,
             "author": {
               "@type": "Person",
               "name": "Vicente Méndez",

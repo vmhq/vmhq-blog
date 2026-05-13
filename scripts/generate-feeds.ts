@@ -1,6 +1,8 @@
 import { writeFileSync, mkdirSync, readdirSync, readFileSync } from "fs";
 import { join, resolve } from "path";
-import { Post, parseFrontmatter, getPostTimestamp, getPostLastMod } from "../src/lib/parse-post";
+import { parseFrontmatter, type Post } from "../src/lib/parse-post";
+import { summarizeMarkdown } from "../src/lib/formatters";
+import { createPost, isValidPost, sortPostsByNewest } from "../src/lib/post-model";
 
 function collectMarkdownFiles(dir: string): string[] {
   const files: string[] = [];
@@ -17,26 +19,18 @@ function collectMarkdownFiles(dir: string): string[] {
 
 function loadPosts(): Post[] {
   const postsDir = resolve(process.cwd(), "posts");
-  return collectMarkdownFiles(postsDir)
+  return sortPostsByNewest(collectMarkdownFiles(postsDir)
     .map((file) => {
       const { data, body } = parseFrontmatter(readFileSync(file, "utf-8"));
-      const post: Post = {
-        slug: data.slug ?? "",
-        title: data.title ?? "",
-        date: data.date ?? "",
-        time: data.time ?? undefined,
-        content: body,
-      };
-      return post;
+      return createPost(data, body);
     })
     .filter((post) => {
-      if (!post.slug || !post.title || !post.date) {
+      if (!isValidPost(post)) {
         console.warn(`Skipping post with missing required fields: slug="${post.slug}" title="${post.title}" date="${post.date}"`);
         return false;
       }
       return true;
-    })
-    .sort((a, b) => getPostTimestamp(b) - getPostTimestamp(a));
+    }));
 }
 
 const SITE_URL = process.env.SITE_URL || "https://vmhq.blog";
@@ -52,29 +46,16 @@ function escapeXml(str: string): string {
     .replace(/'/g, "&apos;");
 }
 
-function safeTruncate(str: string, maxLen: number): string {
-  if (str.length <= maxLen) return str;
-  let truncated = str.slice(0, maxLen);
-  // Avoid cutting in the middle of an escaped entity by backtracking to the last semicolon
-  const lastAmp = truncated.lastIndexOf("&");
-  const lastSemi = truncated.lastIndexOf(";");
-  if (lastAmp > lastSemi) {
-    truncated = truncated.slice(0, lastAmp);
-  }
-  return truncated + "...";
-}
-
 function generateRSS(posts: Post[]): string {
   const items = posts
     .map((post) => {
-      const lastMod = getPostLastMod(post);
-      const pubDate = new Date(lastMod).toUTCString();
+      const pubDate = new Date(post.lastModified).toUTCString();
       return `    <item>
       <title>${escapeXml(post.title)}</title>
       <link>${SITE_URL}/post/${encodeURIComponent(post.slug)}</link>
       <guid isPermaLink="true">${SITE_URL}/post/${encodeURIComponent(post.slug)}</guid>
-      <pubDate>${pubDate === "Invalid Date" ? lastMod : pubDate}</pubDate>
-      <description>${escapeXml(safeTruncate(post.content, 200))}</description>
+      <pubDate>${pubDate === "Invalid Date" ? post.lastModified : pubDate}</pubDate>
+      <description>${escapeXml(summarizeMarkdown(post.content, 200))}</description>
     </item>`;
     })
     .join("\n");
@@ -107,7 +88,7 @@ function generateSitemap(posts: Post[]): string {
     `  <url><loc>${SITE_URL}/about</loc><lastmod>${now}</lastmod></url>`,
     ...posts.map(
       (post) =>
-        `  <url><loc>${SITE_URL}/post/${encodeURIComponent(post.slug)}</loc><lastmod>${getPostLastMod(post)}</lastmod></url>`
+        `  <url><loc>${SITE_URL}/post/${encodeURIComponent(post.slug)}</loc><lastmod>${post.lastModified}</lastmod></url>`
     ),
   ].join("\n");
 
