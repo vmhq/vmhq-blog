@@ -15,3 +15,30 @@ export function readingTime(content: string): string {
   const minutes = Math.max(1, Math.round(words / 200));
   return `${minutes} min de lectura`;
 }
+
+export function markdownToPlainText(markdown: string): string {
+  return markdown
+    .replace(/```[\s\S]*?```/g, " ")
+    .replace(/`[^`]*`/g, " ")
+    .replace(/!\[[^\]]*]\([^)]*\)/g, " ")
+    .replace(/\[([^\]]+)]\([^)]*\)/g, "$1")
+    .replace(/^#{1,6}\s+/gm, "")
+    .replace(/^>\s?/gm, "")
+    .replace(/^[\s-]*[-*+]\s+/gm, "")
+    .replace(/^\s*\d+\.\s+/gm, "")
+    .replace(/[*_~|]/g, "")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&[a-z0-9#]+;/gi, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+export function summarizeMarkdown(markdown: string, maxLength = 160): string {
+  const plainText = markdownToPlainText(markdown);
+  if (plainText.length <= maxLength) return plainText;
+
+  const truncated = plainText.slice(0, maxLength).trimEnd();
+  const lastSpace = truncated.lastIndexOf(" ");
+  const safeText = lastSpace > maxLength * 0.6 ? truncated.slice(0, lastSpace) : truncated;
+  return `${safeText}...`;
+}

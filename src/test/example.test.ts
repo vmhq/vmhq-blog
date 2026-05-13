@@ -1,7 +1,8 @@
 import { describe, it, expect } from "vitest";
 import { getAllPosts, getPostBySlug, getAdjacentPosts } from "@/lib/posts";
 import { parseFrontmatter, getPostTimestamp, getPostLastMod } from "@/lib/parse-post";
-import { formatDate, readingTime } from "@/lib/formatters";
+import { formatDate, markdownToPlainText, readingTime, summarizeMarkdown } from "@/lib/formatters";
+import { createPost, isValidPost, sortPostsByNewest } from "@/lib/post-model";
 import { getInitialTheme, getResolvedTheme, applyTheme } from "@/lib/theme";
 
 describe("parseFrontmatter", () => {
@@ -25,6 +26,19 @@ describe("parseFrontmatter", () => {
     const raw = `---\ntitle: Title: with colon\n---\nBody`;
     const { data } = parseFrontmatter(raw);
     expect(data.title).toBe("Title: with colon");
+  });
+
+  it("strips wrapping quotes from values", () => {
+    const raw = `---\ntitle: "Quoted title"\nslug: 'quoted-slug'\n---\nBody`;
+    const { data } = parseFrontmatter(raw);
+    expect(data.title).toBe("Quoted title");
+    expect(data.slug).toBe("quoted-slug");
+  });
+
+  it("does not treat inline dashes as the frontmatter closing marker", () => {
+    const raw = `---\ntitle: Hello\n---\nFirst paragraph\n\n--- inline separator`;
+    const { body } = parseFrontmatter(raw);
+    expect(body).toContain("--- inline separator");
   });
 });
 
@@ -69,6 +83,10 @@ describe("getAllPosts", () => {
       expect(post.title).toBeTruthy();
       expect(post.date).toMatch(/^\d{4}-\d{2}-\d{2}$/);
       expect(post.content).toBeTruthy();
+      expect(post.description).toBeTruthy();
+      expect(post.readingTime).toMatch(/^\d+ min de lectura$/);
+      expect(post.timestamp).toBeGreaterThan(0);
+      expect(post.lastModified).toBeTruthy();
     }
   });
 });
@@ -139,6 +157,39 @@ describe("readingTime", () => {
 
   it("returns 1 min for empty string", () => {
     expect(readingTime("")).toBe("1 min de lectura");
+  });
+});
+
+describe("markdown formatters", () => {
+  it("converts markdown to plain text", () => {
+    const markdown = "# Title\n\n![Alt](/image.png)\n[Link text](https://example.com) and `code`.";
+    expect(markdownToPlainText(markdown)).toBe("Title Link text and .");
+  });
+
+  it("summarizes markdown without cutting the last word when possible", () => {
+    const summary = summarizeMarkdown("One two three four five", 13);
+    expect(summary).toBe("One two three...");
+  });
+});
+
+describe("post model", () => {
+  it("creates derived post metadata", () => {
+    const post = createPost(
+      { slug: "hello", title: "Hello", date: "2026-01-01", time: "12:00:00" },
+      "Hello world"
+    );
+
+    expect(post.description).toBe("Hello world");
+    expect(post.readingTime).toBe("1 min de lectura");
+    expect(post.timestamp).toBeGreaterThan(0);
+    expect(post.lastModified).toBe("2026-01-01T12:00:00");
+    expect(isValidPost(post)).toBe(true);
+  });
+
+  it("sorts posts by newest timestamp", () => {
+    const older = createPost({ slug: "older", title: "Older", date: "2026-01-01" }, "Older");
+    const newer = createPost({ slug: "newer", title: "Newer", date: "2026-01-02" }, "Newer");
+    expect(sortPostsByNewest([older, newer]).map((post) => post.slug)).toEqual(["newer", "older"]);
   });
 });
 
