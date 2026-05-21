@@ -33,7 +33,7 @@ function loadPosts(): Post[] {
     }));
 }
 
-const SITE_URL = process.env.SITE_URL || "https://vmhq.blog";
+const SITE_URL = process.env.SITE_URL || "https://blog.vmhq.cl";
 
 console.log(`Using SITE_URL: ${SITE_URL}`);
 

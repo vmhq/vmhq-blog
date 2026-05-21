@@ -1,4 +1,6 @@
 import * as React from "react";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 const Index = React.lazy(() => import("./pages/Index"));
@@ -16,6 +18,8 @@ const App = () => (
         <Route path="*" element={<NotFound />} />
       </Routes>
     </React.Suspense>
+    <Analytics />
+    <SpeedInsights />
   </BrowserRouter>
 );
 

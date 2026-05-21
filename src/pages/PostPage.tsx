@@ -10,7 +10,7 @@ import { PreBlock } from "@/components/CodeBlock";
 import { getPostBySlug, getAdjacentPosts } from "@/lib/posts";
 import { formatDate } from "@/lib/formatters";
 
-const SITE_URL = import.meta.env.VITE_SITE_URL || "https://vmhq.blog";
+const SITE_URL = import.meta.env.VITE_SITE_URL || "https://blog.vmhq.cl";
 
 const markdownComponents = {
   pre: PreBlock,
