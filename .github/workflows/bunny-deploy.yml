@@ -1,0 +1,24 @@
+name: Deploy to Bunny Edge Scripting
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "script.ts"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Upload script
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Deploy Script to Bunny Edge Scripting
+        uses: BunnyWay/actions/deploy-script@main
+        with:
+          script_id: ${{ secrets.BUNNY_SCRIPT_ID }}
+          deploy_key: ${{ secrets.BUNNY_DEPLOY_KEY }}
+          file: "script.ts"
