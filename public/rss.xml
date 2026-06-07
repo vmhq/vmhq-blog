@@ -5,13 +5,20 @@
     <link>https://blog.vmhq.cl</link>
     <description>Un espacio para pensar en voz alta.</description>
     <language>es</language>
-    <lastBuildDate>Thu, 21 May 2026 07:24:21 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 07 Jun 2026 05:08:17 GMT</lastBuildDate>
     <atom:link href="https://blog.vmhq.cl/rss.xml" rel="self" type="application/rss+xml" />
     <image>
       <url>https://blog.vmhq.cl/favicon.svg</url>
       <title>vmhq</title>
       <link>https://blog.vmhq.cl</link>
     </image>
+    <item>
+      <title>Soberanía digital: por qué Europa y el mundo están migrando fuera de la nube estadounidense</title>
+      <link>https://blog.vmhq.cl/post/soberania-digital-migracion-nube-europea</link>
+      <guid isPermaLink="true">https://blog.vmhq.cl/post/soberania-digital-migracion-nube-europea</guid>
+      <pubDate>Thu, 04 Jun 2026 03:16:00 GMT</pubDate>
+      <description>Durante décadas, la nube estadounidense fue el estándar incuestionable. Google para el correo, Microsoft para la oficina, Amazon para la infraestructura, OpenAI para la inteligencia artificial. La...</description>
+    </item>
     <item>
       <title>Avances Clave en Inteligencia Artificial hacia la AGI: Análisis del Panorama en Abril 2026</title>
       <link>https://blog.vmhq.cl/post/panorama-agi-abril-2026</link>
