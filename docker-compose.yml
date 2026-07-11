@@ -3,6 +3,8 @@ services:
     image: ghcr.io/vmhq/vmhq-blog:latest
     ports:
       - "9845:80"
+    volumes:
+      - posts_data:/data:ro
     depends_on:
       api:
         condition: service_healthy
@@ -12,13 +14,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.api
+    volumes:
+      - posts_data:/data
     expose:
       - "8787"
     environment:
       BLOG_API_TOKEN: ${BLOG_API_TOKEN}
-      GITHUB_TOKEN: ${GITHUB_TOKEN}
-      GITHUB_REPO: ${GITHUB_REPO:-vmhq/vmhq-blog}
-      GITHUB_BRANCH: ${GITHUB_BRANCH:-main}
       SITE_URL: ${SITE_URL:-https://blog.vmhq.cl}
     healthcheck:
       test: ["CMD", "bun", "-e", "fetch('http://localhost:8787/api/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
@@ -27,3 +28,6 @@ services:
       retries: 3
       start_period: 5s
     restart: unless-stopped
+
+volumes:
+  posts_data:

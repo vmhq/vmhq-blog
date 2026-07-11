@@ -2,7 +2,7 @@ import * as React from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import BlogLayout from "@/components/BlogLayout";
-import { getAllPosts } from "@/lib/posts";
+import { usePosts } from "@/lib/posts";
 import { formatDate } from "@/lib/formatters";
 
 const POSTS_PER_PAGE = 10;
@@ -10,7 +10,7 @@ const POSTS_PER_PAGE = 10;
 const Index = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = Math.max(1, Number(searchParams.get("page")) || 1);
-  const posts = React.useMemo(() => getAllPosts(), []);
+  const { posts, loading, error } = usePosts();
   const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE);
   const paginated = posts.slice((currentPage - 1) * POSTS_PER_PAGE, currentPage * POSTS_PER_PAGE);
 
@@ -30,7 +30,11 @@ const Index = () => {
         <meta name="description" content="Reflexiones sobre inteligencia artificial, derechos humanos, tecnología y política. Un espacio para pensar en voz alta." />
       </Helmet>
       <div className="space-y-8">
-        {paginated.length === 0 && (
+        {loading && <p className="text-muted-foreground">Cargando...</p>}
+        {!loading && error && (
+          <p className="text-muted-foreground">No se pudieron cargar los posts.</p>
+        )}
+        {!loading && !error && paginated.length === 0 && (
           <p className="text-muted-foreground">No hay posts disponibles.</p>
         )}
         {paginated.map((post) => (

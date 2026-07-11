@@ -1,9 +1,11 @@
-import { describe, it, expect } from "vitest";
-import { getAllPosts, getPostBySlug, getAdjacentPosts } from "@/lib/posts";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { renderHook, waitFor } from "@testing-library/react";
+import type { Post } from "@/lib/parse-post";
 import { parseFrontmatter, getPostTimestamp, getPostLastMod } from "@/lib/parse-post";
 import { formatDate, markdownToPlainText, readingTime, summarizeMarkdown } from "@/lib/formatters";
 import { createPost, isValidPost, sortPostsByNewest } from "@/lib/post-model";
 import { getInitialTheme, getResolvedTheme, applyTheme } from "@/lib/theme";
+import { getAdjacentPosts } from "@/lib/posts";
 
 describe("parseFrontmatter", () => {
   it("parses basic frontmatter", () => {
@@ -67,71 +69,97 @@ describe("getPostLastMod", () => {
   });
 });
 
-describe("getAllPosts", () => {
-  it("returns posts sorted by timestamp descending", () => {
-    const posts = getAllPosts();
-    expect(posts.length).toBeGreaterThan(0);
-    for (let i = 1; i < posts.length; i++) {
-      expect(getPostTimestamp(posts[i - 1])).toBeGreaterThanOrEqual(getPostTimestamp(posts[i]));
-    }
+const SAMPLE_POSTS: Post[] = [
+  {
+    slug: "newest",
+    title: "Newest",
+    date: "2026-03-03",
+    content: "Newest content",
+    description: "Newest content",
+    readingTime: "1 min de lectura",
+    timestamp: 3,
+    lastModified: "2026-03-03",
+  },
+  {
+    slug: "middle",
+    title: "Middle",
+    date: "2026-03-02",
+    content: "Middle content",
+    description: "Middle content",
+    readingTime: "1 min de lectura",
+    timestamp: 2,
+    lastModified: "2026-03-02",
+  },
+  {
+    slug: "oldest",
+    title: "Oldest",
+    date: "2026-03-01",
+    content: "Oldest content",
+    description: "Oldest content",
+    readingTime: "1 min de lectura",
+    timestamp: 1,
+    lastModified: "2026-03-01",
+  },
+];
+
+describe("usePosts", () => {
+  beforeEach(() => {
+    vi.resetModules();
   });
 
-  it("each post has required fields", () => {
-    const posts = getAllPosts();
-    for (const post of posts) {
-      expect(post.slug).toBeTruthy();
-      expect(post.title).toBeTruthy();
-      expect(post.date).toMatch(/^\d{4}-\d{2}-\d{2}$/);
-      expect(post.content).toBeTruthy();
-      expect(post.description).toBeTruthy();
-      expect(post.readingTime).toMatch(/^\d+ min de lectura$/);
-      expect(post.timestamp).toBeGreaterThan(0);
-      expect(post.lastModified).toBeTruthy();
-    }
-  });
-});
-
-describe("getPostBySlug", () => {
-  it("returns post for valid slug", () => {
-    const posts = getAllPosts();
-    const first = posts[0];
-    expect(first).toBeDefined();
-    const post = getPostBySlug(first.slug);
-    expect(post).toBeDefined();
-    expect(post!.title).toBe(first.title);
+  afterEach(() => {
+    vi.unstubAllGlobals();
   });
 
-  it("returns undefined for invalid slug", () => {
-    expect(getPostBySlug("nonexistent")).toBeUndefined();
+  it("fetches posts from /api/posts and exposes them once loaded", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({ ok: true, json: async () => SAMPLE_POSTS })
+    );
+
+    const { usePosts } = await import("@/lib/posts");
+    const { result } = renderHook(() => usePosts());
+
+    expect(result.current.loading).toBe(true);
+    await waitFor(() => expect(result.current.loading).toBe(false));
+
+    expect(result.current.posts).toEqual(SAMPLE_POSTS);
+    expect(result.current.error).toBeNull();
+    expect(fetch).toHaveBeenCalledWith("/api/posts");
+  });
+
+  it("exposes an error when the request fails", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false, status: 500 }));
+
+    const { usePosts } = await import("@/lib/posts");
+    const { result } = renderHook(() => usePosts());
+
+    await waitFor(() => expect(result.current.loading).toBe(false));
+
+    expect(result.current.posts).toEqual([]);
+    expect(result.current.error).toBeInstanceOf(Error);
   });
 });
 
 describe("getAdjacentPosts", () => {
   it("returns prev and next for a middle post", () => {
-    const posts = getAllPosts();
-    if (posts.length < 3) return;
-    const middle = posts[1];
-    const adjacent = getAdjacentPosts(middle.slug);
-    expect(adjacent.prev).toBeDefined();
-    expect(adjacent.next).toBeDefined();
+    const adjacent = getAdjacentPosts(SAMPLE_POSTS, "middle");
+    expect(adjacent.prev?.slug).toBe("newest");
+    expect(adjacent.next?.slug).toBe("oldest");
   });
 
-  it("returns null next for oldest post", () => {
-    const posts = getAllPosts();
-    const oldest = posts[posts.length - 1];
-    const adjacent = getAdjacentPosts(oldest.slug);
+  it("returns null next for the oldest post", () => {
+    const adjacent = getAdjacentPosts(SAMPLE_POSTS, "oldest");
     expect(adjacent.next).toBeNull();
   });
 
-  it("returns null prev for newest post", () => {
-    const posts = getAllPosts();
-    const newest = posts[0];
-    const adjacent = getAdjacentPosts(newest.slug);
+  it("returns null prev for the newest post", () => {
+    const adjacent = getAdjacentPosts(SAMPLE_POSTS, "newest");
     expect(adjacent.prev).toBeNull();
   });
 
-  it("returns both null for unknown slug", () => {
-    const adjacent = getAdjacentPosts("unknown-slug-12345");
+  it("returns both null for an unknown slug", () => {
+    const adjacent = getAdjacentPosts(SAMPLE_POSTS, "unknown-slug-12345");
     expect(adjacent.prev).toBeNull();
     expect(adjacent.next).toBeNull();
   });

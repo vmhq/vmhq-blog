@@ -88,12 +88,12 @@ export function sanitizeImageFilename(filename: string): string | null {
 }
 
 export function buildImagePaths(slug: string, sanitizedFilename: string): {
-  repoPath: string;
+  dataPath: string;
   markdownUrl: string;
 } {
   const finalName = `${slug}-${sanitizedFilename}`;
   return {
-    repoPath: `public/images/posts/${finalName}`,
+    dataPath: `images/posts/${finalName}`,
     markdownUrl: `/images/posts/${finalName}`,
   };
 }

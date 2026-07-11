@@ -7,7 +7,7 @@ import rehypeSanitize from "rehype-sanitize";
 import { Helmet } from "react-helmet-async";
 import BlogLayout from "@/components/BlogLayout";
 import { PreBlock } from "@/components/CodeBlock";
-import { getPostBySlug, getAdjacentPosts } from "@/lib/posts";
+import { usePosts, getAdjacentPosts } from "@/lib/posts";
 import { formatDate } from "@/lib/formatters";
 
 const SITE_URL = import.meta.env.VITE_SITE_URL || "https://blog.vmhq.cl";
@@ -26,8 +26,9 @@ const markdownComponents = {
 
 const PostPage = () => {
   const { slug } = useParams<{ slug: string }>();
-  const post = slug ? getPostBySlug(slug) : undefined;
-  const adjacent = slug ? getAdjacentPosts(slug) : { prev: null, next: null };
+  const { posts, loading } = usePosts();
+  const post = slug ? posts.find((p) => p.slug === slug) : undefined;
+  const adjacent = slug ? getAdjacentPosts(posts, slug) : { prev: null, next: null };
   const [showBackToTop, setShowBackToTop] = React.useState(false);
   const showBackToTopRef = React.useRef(false);
 
@@ -68,6 +69,14 @@ const PostPage = () => {
       if (frameId) window.cancelAnimationFrame(frameId);
     };
   }, []);
+
+  if (loading) {
+    return (
+      <BlogLayout>
+        <p className="text-muted-foreground">Cargando...</p>
+      </BlogLayout>
+    );
+  }
 
   if (!post) return <Navigate to="/" replace />;
 

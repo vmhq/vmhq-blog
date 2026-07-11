@@ -93,9 +93,9 @@ describe("sanitizeImageFilename", () => {
 });
 
 describe("buildImagePaths", () => {
-  it("prefixes the slug and targets public/images/posts", () => {
+  it("prefixes the slug and targets images/posts under the data dir", () => {
     expect(buildImagePaths("mi-post", "foto.png")).toEqual({
-      repoPath: "public/images/posts/mi-post-foto.png",
+      dataPath: "images/posts/mi-post-foto.png",
       markdownUrl: "/images/posts/mi-post-foto.png",
     });
   });

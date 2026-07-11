@@ -80,7 +80,9 @@ Frontmatter notes:
 - `title` does not need quotes, even when it contains colons (`:`). The parser splits on the first `:` only.
 - Posts are ordered by `date` and, when present, `time` (most recent first).
 
-To publish a new post, create the `.md` file in the appropriate folder and run a build. The system picks it up automatically.
+The site no longer reads posts from this repo at runtime. The frontend always fetches posts from the [Posts API](#posts-api) (`GET /api/posts`), which reads from a data directory outside of git — a Docker named volume in production, `./data` locally. The `posts/` and `public/images/posts/` folders here are kept only as seed content: the API copies them into that data directory the first time it starts with an empty one (see [Docker](#docker)). After that, publishing only goes through the API and never touches git.
+
+To publish a post — locally or in production — use `POST /api/posts` (see below). To edit the seed content itself (the historical archive used to bootstrap a fresh deployment), edit files under `posts/`.
 
 ## Images in Posts
 
@@ -133,29 +135,30 @@ Format: `{Post title} — vmhq` for posts, `vmhq` for the index.
 - **Copy button** — overlay on hover over any code block, copies to clipboard with visual feedback
 - **Prev/next navigation** — at the end of each post, links to the previous (older) and next (newer) post
 
-## Build-Time Generation
+## RSS and Sitemap
 
-The `prebuild` script runs before every build and generates:
-- `public/rss.xml` — RSS 2.0 feed (from `.md` files)
-- `public/sitemap.xml` — XML sitemap
+`rss.xml` and `sitemap.xml` are generated dynamically by the Posts API from whatever is in `DATA_DIR` (`GET /rss.xml`, `GET /sitemap.xml`), proxied through nginx at the same paths in Docker. Generation logic lives in `src/lib/feeds.ts`, shared with `scripts/generate-feeds.ts`.
 
-`SITE_URL` is resolved from `process.env.SITE_URL` (set in the deployment environment), with no hardcoded domain. Falls back to `localhost:8080` for local development.
+`scripts/generate-feeds.ts` still runs as a `prebuild` step and writes static `public/rss.xml` / `public/sitemap.xml` files from the git-tracked `posts/` seed folder. In Docker these static files are shadowed by the dynamic `/rss.xml` and `/sitemap.xml` routes above; the static output only matters for a plain `bun run build` outside Docker (e.g. Vercel), where it reflects the frozen seed content, not posts published later via the API.
 
-The RSS feed includes an `<image>` block pointing to the site's SVG favicon.
+`SITE_URL` is resolved from `process.env.SITE_URL` (set in the deployment environment), with no hardcoded domain. The RSS feed includes an `<image>` block pointing to the site's SVG favicon.
 
 ## Posts API
 
-`api/server.ts` is a standalone Bun HTTP server (no external dependencies, no cloud provider) that lets AI agents publish posts without cloning the repo. It commits Markdown posts and images straight to `main` via the GitHub Git Data API.
+`api/server.ts` is a standalone Bun HTTP server (no external dependencies, no cloud provider, no GitHub token) that lets AI agents publish posts without cloning the repo. It writes Markdown posts and images straight to `DATA_DIR` on local disk — a Docker named volume in production.
 
 ```sh
 # Run locally
 bun run api
 ```
 
+On first run against an empty `DATA_DIR`, the API seeds it from `posts/` and `public/images/posts/` (see [Posts](#posts)), so existing content keeps working before any new post is published.
+
 Endpoints:
 
 | Endpoint | Description |
 |---|---|
+| `GET /api/posts` | Public. Returns all posts as JSON, newest first — this is what the frontend fetches at runtime. |
 | `POST /api/posts` | `multipart/form-data` with `title`, `content` (Markdown, no frontmatter), optional `slug`, `date`, `time`, and repeatable `images` file parts. Requires `Authorization: Bearer <BLOG_API_TOKEN>`. |
 | `GET /api/health` | Unauthenticated health check. |
 
@@ -164,18 +167,18 @@ Configuration is via environment variables — copy `.env.example` to `.env`:
 | Variable | Required | Description |
 |---|---|---|
 | `BLOG_API_TOKEN` | Yes | Bearer token AI agents must send. Generate with `openssl rand -hex 32`. |
-| `GITHUB_TOKEN` | Yes | Fine-grained GitHub PAT with `contents:write` on this repo. |
-| `GITHUB_REPO` | No | Defaults to `vmhq/vmhq-blog`. |
-| `GITHUB_BRANCH` | No | Defaults to `main`. |
+| `DATA_DIR` | No | Where posts/images are read from and written to. Defaults to `./data` locally, `/data` in Docker. |
 | `SITE_URL` | No | Defaults to `https://blog.vmhq.cl`. |
 | `PORT` | No | Defaults to `8787`. |
 
 ## Docker
 
-`docker-compose.yml` runs two services on the default Compose network:
+`docker-compose.yml` runs two services on the default Compose network, sharing a `posts_data` named volume:
 
-- **`blog`** — nginx serving the static production build, pulled from `ghcr.io/vmhq/vmhq-blog:latest` (built by `Dockerfile` and published by CI on every push to `main`). Exposed on host port `9845`. Its `nginx.conf` proxies `/api/` to the `api` service by Docker service name, so the Posts API is also reachable at `http://<host>:9845/api/...`.
-- **`api`** — the Posts API, built locally from `Dockerfile.api`. Not exposed directly on the host; only reachable through `blog`'s nginx proxy at `http://<host>:9845/api/...`, or from other containers on the same Compose network at `api:8787`. Reads its config from the environment variables above. Has a healthcheck (`GET /api/health`); `blog` waits for it to report healthy before starting.
+- **`blog`** — nginx serving the static production build, pulled from `ghcr.io/vmhq/vmhq-blog:latest` (built by `Dockerfile` and published by CI on every push to `main`). Exposed on host port `9845`. Its `nginx.conf` proxies `/api/`, `/rss.xml`, and `/sitemap.xml` to the `api` service by Docker service name, and serves `/images/posts/` straight from the volume (read-only mount).
+- **`api`** — the Posts API, built locally from `Dockerfile.api`. Not exposed directly on the host; only reachable through `blog`'s nginx proxy, or from other containers on the same Compose network at `api:8787`. Mounts `posts_data` read-write at `/data`. Has a healthcheck (`GET /api/health`); `blog` waits for it to report healthy before starting.
+
+Posts and images published via the API live only in the `posts_data` volume — they are never committed to git. Back up the volume (e.g. `docker run --rm -v vmhq-blog_posts_data:/data -v $PWD:/backup alpine tar -C /data -czf /backup/posts-backup.tgz .`) if you want durability beyond the seed content already in `posts/`.
 
 ```sh
 docker compose up -d
