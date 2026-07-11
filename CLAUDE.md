@@ -113,9 +113,7 @@ The favicon is an adaptive SVG (`public/favicon.svg`) with `@media (prefers-colo
 
 ## Styling Notes
 
-- Tailwind 4 is enabled through:
-  - `@import "tailwindcss";`
-  - `@config "../tailwind.config.ts";`
+- Tailwind 4 is enabled CSS-first via `@import "tailwindcss";` in `src/index.css` — there is no `tailwind.config.ts`
 - PostCSS uses `@tailwindcss/postcss`
 - Theme tokens are CSS variables in `src/index.css`
 - Dark mode uses the `dark` class and must remain readable
