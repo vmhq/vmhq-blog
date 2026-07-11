@@ -4,3 +4,17 @@ services:
     ports:
       - "9845:80"
     restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    ports:
+      - "9846:8787"
+    environment:
+      BLOG_API_TOKEN: ${BLOG_API_TOKEN}
+      GITHUB_TOKEN: ${GITHUB_TOKEN}
+      GITHUB_REPO: ${GITHUB_REPO:-vmhq/vmhq-blog}
+      GITHUB_BRANCH: ${GITHUB_BRANCH:-main}
+      SITE_URL: ${SITE_URL:-https://blog.vmhq.cl}
+    restart: unless-stopped

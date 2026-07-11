@@ -1,0 +1,13 @@
+# Standalone Posts API (Bun, no external dependencies)
+FROM oven/bun:1-alpine
+
+WORKDIR /app
+
+COPY api ./api
+
+ENV PORT=8787
+EXPOSE 8787
+
+USER bun
+
+CMD ["bun", "run", "api/server.ts"]
