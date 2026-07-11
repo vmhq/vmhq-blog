@@ -175,7 +175,7 @@ Configuration is via environment variables — copy `.env.example` to `.env`:
 `docker-compose.yml` runs two services on the default Compose network:
 
 - **`blog`** — nginx serving the static production build, pulled from `ghcr.io/vmhq/vmhq-blog:latest` (built by `Dockerfile` and published by CI on every push to `main`). Exposed on host port `9845`. Its `nginx.conf` proxies `/api/` to the `api` service by Docker service name, so the Posts API is also reachable at `http://<host>:9845/api/...`.
-- **`api`** — the Posts API, built locally from `Dockerfile.api`. Also exposed directly on host port `9846`, reads its config from the environment variables above.
+- **`api`** — the Posts API, built locally from `Dockerfile.api`. Not exposed directly on the host; only reachable through `blog`'s nginx proxy at `http://<host>:9845/api/...`, or from other containers on the same Compose network at `api:8787`. Reads its config from the environment variables above. Has a healthcheck (`GET /api/health`); `blog` waits for it to report healthy before starting.
 
 ```sh
 docker compose up -d
