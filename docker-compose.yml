@@ -3,6 +3,8 @@ services:
     image: ghcr.io/vmhq/vmhq-blog:latest
     ports:
       - "9845:80"
+    depends_on:
+      - api
     restart: unless-stopped
 
   api:
