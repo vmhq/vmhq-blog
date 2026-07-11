@@ -1,4 +1,8 @@
-import { commitFilesToRepo, fileExistsInRepo, GitHubError, type CommitFile } from "./github";
+import { readFile } from "node:fs/promises";
+import { extname, resolve, sep } from "node:path";
+import { fileExists, StorageError, writeFiles, type WriteFile } from "./storage";
+import { loadAllPosts } from "./posts-repo";
+import { generateRSS, generateSitemap } from "../src/lib/feeds";
 import {
   buildImagePaths,
   buildPostFilePath,
@@ -16,9 +20,7 @@ import {
 
 export interface ApiEnv {
   BLOG_API_TOKEN: string;
-  GITHUB_TOKEN: string;
-  GITHUB_REPO: string;
-  GITHUB_BRANCH: string;
+  DATA_DIR: string;
   SITE_URL: string;
 }
 
@@ -26,6 +28,12 @@ function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body, null, 2), {
     status,
     headers: { "Content-Type": "application/json; charset=utf-8" },
+  });
+}
+
+function xml(body: string, contentType: string): Response {
+  return new Response(body, {
+    headers: { "Content-Type": `${contentType}; charset=utf-8` },
   });
 }
 
@@ -54,6 +62,53 @@ function toBase64(buffer: ArrayBuffer): string {
     binary += String.fromCharCode(...bytes.subarray(i, i + chunkSize));
   }
   return btoa(binary);
+}
+
+async function handleListPosts(env: ApiEnv): Promise<Response> {
+  const posts = await loadAllPosts(env.DATA_DIR);
+  return json(posts);
+}
+
+async function handleRss(env: ApiEnv): Promise<Response> {
+  const posts = await loadAllPosts(env.DATA_DIR);
+  return xml(generateRSS(posts, env.SITE_URL), "application/rss+xml");
+}
+
+async function handleSitemap(env: ApiEnv): Promise<Response> {
+  const posts = await loadAllPosts(env.DATA_DIR);
+  return xml(generateSitemap(posts, env.SITE_URL), "application/xml");
+}
+
+const IMAGE_CONTENT_TYPES: Record<string, string> = {
+  ".png": "image/png",
+  ".jpg": "image/jpeg",
+  ".jpeg": "image/jpeg",
+  ".webp": "image/webp",
+  ".gif": "image/gif",
+  ".avif": "image/avif",
+};
+
+// Only used locally (bun run dev proxies /images/posts here). In Docker,
+// nginx serves this path straight from the posts_data volume instead.
+async function handleImage(pathname: string, env: ApiEnv): Promise<Response> {
+  const filename = pathname.replace(/^\/images\/posts\//, "");
+  const contentType = IMAGE_CONTENT_TYPES[extname(filename).toLowerCase()];
+  if (!contentType || filename.includes("/") || filename.includes("..")) {
+    return json({ error: "Not found." }, 404);
+  }
+
+  const root = resolve(env.DATA_DIR, "images/posts");
+  const fullPath = resolve(root, filename);
+  if (fullPath !== root && !fullPath.startsWith(root + sep)) {
+    return json({ error: "Not found." }, 404);
+  }
+
+  try {
+    const data = await readFile(fullPath);
+    return new Response(data, { headers: { "Content-Type": contentType } });
+  } catch {
+    return json({ error: "Not found." }, 404);
+  }
 }
 
 async function handlePublishPost(request: Request, env: ApiEnv): Promise<Response> {
@@ -101,13 +156,13 @@ async function handlePublishPost(request: Request, env: ApiEnv): Promise<Respons
     return json({ error: `Too many images. Maximum is ${MAX_IMAGES_PER_POST} per post.` }, 400);
   }
 
-  const github = { token: env.GITHUB_TOKEN, repo: env.GITHUB_REPO, branch: env.GITHUB_BRANCH };
+  const storage = { dataDir: env.DATA_DIR };
   const postPath = buildPostFilePath(slug, date);
 
-  const files: CommitFile[] = [
+  const files: WriteFile[] = [
     { path: postPath, text: buildPostMarkdown({ title, slug, date, time, content }) },
   ];
-  const publishedImages: Array<{ filename: string; repoPath: string; markdownUrl: string }> = [];
+  const publishedImages: Array<{ filename: string; dataPath: string; markdownUrl: string }> = [];
 
   for (const image of imageEntries) {
     const sanitized = sanitizeImageFilename(image.name);
@@ -121,20 +176,16 @@ async function handlePublishPost(request: Request, env: ApiEnv): Promise<Respons
       return json({ error: `Image '${image.name}' exceeds ${MAX_IMAGE_BYTES} bytes.` }, 413);
     }
     const paths = buildImagePaths(slug, sanitized);
-    files.push({ path: paths.repoPath, base64: toBase64(await image.arrayBuffer()) });
+    files.push({ path: paths.dataPath, base64: toBase64(await image.arrayBuffer()) });
     publishedImages.push({ filename: image.name, ...paths });
   }
 
   try {
-    if (await fileExistsInRepo(github, postPath)) {
+    if (await fileExists(storage, postPath)) {
       return json({ error: `A post with slug '${slug}' already exists for ${date} (${postPath}).` }, 409);
     }
 
-    const commit = await commitFilesToRepo(
-      github,
-      files,
-      `feat: add post "${title}" (published via API)`
-    );
+    await writeFiles(storage, files);
 
     return json(
       {
@@ -145,14 +196,13 @@ async function handlePublishPost(request: Request, env: ApiEnv): Promise<Respons
         url: `${env.SITE_URL}/post/${slug}`,
         post_path: postPath,
         images: publishedImages,
-        commit: commit.sha,
-        note: "The site rebuilds from the new commit; the post will be live in a few minutes.",
+        note: "The post is live immediately.",
       },
       201
     );
   } catch (error) {
-    if (error instanceof GitHubError) {
-      return json({ error: `Publishing failed while talking to GitHub: ${error.message}` }, 502);
+    if (error instanceof StorageError) {
+      return json({ error: `Publishing failed: ${error.message}` }, 400);
     }
     throw error;
   }
@@ -166,10 +216,22 @@ export async function handleRequest(request: Request, env: ApiEnv): Promise<Resp
   }
 
   if (url.pathname === "/api/posts") {
-    if (request.method !== "POST") {
-      return json({ error: "Method not allowed. Use POST." }, 405);
-    }
-    return handlePublishPost(request, env);
+    if (request.method === "GET") return handleListPosts(env);
+    if (request.method === "POST") return handlePublishPost(request, env);
+    return json({ error: "Method not allowed. Use GET or POST." }, 405);
+  }
+
+  if (url.pathname === "/rss.xml") {
+    return handleRss(env);
+  }
+
+  if (url.pathname === "/sitemap.xml") {
+    return handleSitemap(env);
+  }
+
+  if (url.pathname.startsWith("/images/posts/")) {
+    if (request.method !== "GET") return json({ error: "Method not allowed." }, 405);
+    return handleImage(url.pathname, env);
   }
 
   return json({ error: "Not found." }, 404);

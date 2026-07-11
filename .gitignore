@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# Posts API local data dir (posts + images written at runtime by api/server.ts)
+/data
+
 # AI tooling (skills and local configs)
 .agents/
 .claude/

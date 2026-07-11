@@ -4,9 +4,22 @@ FROM oven/bun:1-alpine
 WORKDIR /app
 
 COPY api ./api
+COPY src/lib ./src/lib
+
+# Seed content baked into the image so a fresh posts_data volume boots with
+# today's posts/images. Only used on first boot, when /data is empty.
+COPY posts ./seed/posts
+COPY public/images/posts ./seed/images/posts
 
 ENV PORT=8787
+ENV DATA_DIR=/data
+ENV SEED_POSTS_DIR=/app/seed/posts
+ENV SEED_IMAGES_DIR=/app/seed/images/posts
 EXPOSE 8787
+
+# Named volumes are initialized from the image's content at this path on
+# first mount, which also carries over this chown so the bun user can write.
+RUN mkdir -p /data && chown -R bun:bun /data /app/seed
 
 USER bun
 

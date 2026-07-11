@@ -10,6 +10,12 @@ export default defineConfig({
     hmr: {
       overlay: false,
     },
+    proxy: {
+      "/api": "http://127.0.0.1:8787",
+      "/rss.xml": "http://127.0.0.1:8787",
+      "/sitemap.xml": "http://127.0.0.1:8787",
+      "/images/posts": "http://127.0.0.1:8787",
+    },
   },
   build: {
     sourcemap: "hidden",
