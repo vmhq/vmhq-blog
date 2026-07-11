@@ -128,6 +128,18 @@ The favicon is an adaptive SVG (`public/favicon.svg`) with `@media (prefers-colo
 - Do **not** modify files in `src/components/ui/` directly
 - Create wrapper components in `src/components/` if customization is needed
 
+## Posts API (standalone Bun server)
+
+`api/server.ts` is a self-hosted HTTP API (plain `Bun.serve`, zero external dependencies, no cloud provider required) so AI agents can publish posts without cloning the repo:
+
+- `POST /api/posts` — `multipart/form-data` with `title`, `content` (Markdown body, no frontmatter), optional `slug`, `date`, `time`, and repeatable `images` file parts. Auth: `Authorization: Bearer <BLOG_API_TOKEN>`.
+- `GET /api/health` — unauthenticated health check.
+- Publishing commits the post to `posts/YYYY/<mes>/<slug con guiones bajos>_DD_MM.md` and images to `public/images/posts/<slug>-<archivo>` on `main` via the GitHub Git Data API; the site rebuilds from that commit. The API itself never touches the hosting.
+- Layout: `api/handler.ts` (portable fetch handler), `api/publish.ts` (pure logic, tested in `api/publish.test.ts`), `api/github.ts` (GitHub client), `api/server.ts` (Bun entry).
+- Run locally: `bun run api`. Docker: service `api` in `docker-compose.yml` (`Dockerfile.api`, host port 9846).
+- Config via env vars (see `.env.example`): required `BLOG_API_TOKEN` (bearer token) and `GITHUB_TOKEN` (fine-grained PAT with `contents:write` on the repo); optional `GITHUB_REPO`, `GITHUB_BRANCH`, `SITE_URL`, `PORT`.
+- The agent-facing usage guide is the `publish-post` skill at `.agents/skills/publish-post/SKILL.md`.
+
 ## Before Finishing Work
 
 Always run, when relevant:
