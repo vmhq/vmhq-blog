@@ -134,7 +134,7 @@ The favicon is an adaptive SVG (`public/favicon.svg`) with `@media (prefers-colo
 - `GET /api/health` — unauthenticated health check.
 - Publishing commits the post to `posts/YYYY/<mes>/<slug con guiones bajos>_DD_MM.md` and images to `public/images/posts/<slug>-<archivo>` on `main` via the GitHub Git Data API; the site rebuilds from that commit. The API itself never touches the hosting.
 - Layout: `api/handler.ts` (portable fetch handler), `api/publish.ts` (pure logic, tested in `api/publish.test.ts`), `api/github.ts` (GitHub client), `api/server.ts` (Bun entry).
-- Run locally: `bun run api`. Docker: service `api` in `docker-compose.yml` (`Dockerfile.api`, host port 9846).
+- Run locally: `bun run api`. Docker: service `api` in `docker-compose.yml` (`Dockerfile.api`), not exposed on the host directly — reachable via `blog`'s nginx proxy at `/api/` on port 9845, or as `api:8787` on the Compose network. Has a `healthcheck` hitting `GET /api/health` via `bun`'s own `fetch` (no `curl`/`wget` in the alpine image); `blog` depends on `api` with `condition: service_healthy`.
 - Config via env vars (see `.env.example`): required `BLOG_API_TOKEN` (bearer token) and `GITHUB_TOKEN` (fine-grained PAT with `contents:write` on the repo); optional `GITHUB_REPO`, `GITHUB_BRANCH`, `SITE_URL`, `PORT`.
 - The agent-facing usage guide is the `publish-post` skill at `.agents/skills/publish-post/SKILL.md`.
 
