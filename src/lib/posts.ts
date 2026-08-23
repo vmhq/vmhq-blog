@@ -5,6 +5,10 @@ export type { Post };
 
 let cachedPosts: Promise<Post[]> | null = null;
 
+export function invalidatePostsCache(): void {
+  cachedPosts = null;
+}
+
 function loadPosts(): Promise<Post[]> {
   if (!cachedPosts) {
     cachedPosts = fetch("/api/posts")

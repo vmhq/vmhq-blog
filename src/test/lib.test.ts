@@ -139,6 +139,21 @@ describe("usePosts", () => {
     expect(result.current.posts).toEqual([]);
     expect(result.current.error).toBeInstanceOf(Error);
   });
+
+  it("re-fetches when invalidatePostsCache is called", async () => {
+    const fetchMock = vi.fn().mockResolvedValue({ ok: true, json: async () => SAMPLE_POSTS });
+    vi.stubGlobal("fetch", fetchMock);
+
+    const { usePosts, invalidatePostsCache } = await import("@/lib/posts");
+    const { unmount } = renderHook(() => usePosts());
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
+
+    unmount();
+    invalidatePostsCache();
+
+    renderHook(() => usePosts());
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2));
+  });
 });
 
 describe("getAdjacentPosts", () => {
