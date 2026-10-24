@@ -175,7 +175,7 @@ Configuration is via environment variables — copy `.env.example` to `.env`:
 
 `docker-compose.yml` runs two services on the default Compose network, sharing a `posts_data` named volume:
 
-- **`blog`** — nginx serving the static production build, pulled from `ghcr.io/vmhq/vmhq-blog:latest` (built by `Dockerfile` and published by CI on every push to `main`). Exposed on host port `9845`. Its `nginx.conf` proxies `/api/`, `/rss.xml`, and `/sitemap.xml` to the `api` service by Docker service name, and serves `/images/posts/` straight from the volume (read-only mount).
+- **`blog`** — nginx serving the static production build, pulled from `ghcr.io/vmhq/vmhq-blog:latest` (built by `Dockerfile` and published by CI on every push to `main` as a multi-arch image for `linux/amd64` and `linux/arm64`). Exposed on host port `9845`. Its `nginx.conf` proxies `/api/`, `/rss.xml`, and `/sitemap.xml` to the `api` service by Docker service name, and serves `/images/posts/` straight from the volume (read-only mount).
 - **`api`** — the Posts API, built locally from `Dockerfile.api`. Not exposed directly on the host; only reachable through `blog`'s nginx proxy, or from other containers on the same Compose network at `api:8787`. Mounts `posts_data` read-write at `/data`. Has a healthcheck (`GET /api/health`); `blog` waits for it to report healthy before starting.
 
 Posts and images published via the API live only in the `posts_data` volume — they are never committed to git. Back up the volume (e.g. `docker run --rm -v vmhq-blog_posts_data:/data -v $PWD:/backup alpine tar -C /data -czf /backup/posts-backup.tgz .`) if you want durability beyond the seed content already in `posts/`.

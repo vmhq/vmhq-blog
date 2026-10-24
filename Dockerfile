@@ -1,6 +1,7 @@
 # Multi-stage build for vmhq-blog
-# Stage 1: Build with Bun
-FROM oven/bun:1-alpine AS builder
+# Stage 1: Build with Bun. Runs on the build host's native platform: the output
+# is static files, so multi-arch images don't need to emulate this stage.
+FROM --platform=$BUILDPLATFORM oven/bun:1-alpine AS builder
 
 WORKDIR /app
 
